@@ -41,15 +41,15 @@ conf.charlie { :a => 1, :b => 2, :c => 3 }
 conf.delta [ 1, 2, 3 ]
 ```
 
-#### Configuration DSL - builder style
+#### Configuration DSL - block yield style
 
 ```ruby
-conf = Iqeo::Configuration do |c|
+conf = Iqeo::Configuration.new do |c|
 
-  conf.alpha 42
-  conf.bravo "foobar"
-  conf.charlie { :a => 1, :b => 2, :c => 3 }
-  conf.delta [ 1, 2, 3 ]
+  c.alpha 42
+  c.bravo "foobar"
+  c.charlie { :a => 1, :b => 2, :c => 3 }
+  c.delta [ 1, 2, 3 ]
 
 end
 ```
@@ -57,7 +57,7 @@ end
 ### Configuration DSL - freestyle
 
 ```ruby
-conf = Iqeo::Configuration do
+conf = Iqeo::Configuration.new do
 
   alpha 42
   bravo "foobar"

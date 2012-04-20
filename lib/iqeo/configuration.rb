@@ -6,6 +6,7 @@ module Iqeo
   class Configuration
 
     # todo: tests - init without block, with block & param, with plain block
+    # todo: instance_eval vs. yield (arity == 0) ?
 
     def initialize &block
       @items = {}
@@ -19,6 +20,7 @@ module Iqeo
     end
 
     # todo: tests - with value, without value, multiple values ?, optional '=' with value ?
+    # todo: why does '=' break for instance eval ? - is it actually setting a local variable ???
 
     def method_missing name, *value
       name = name.to_s.chomp('=').to_sym
