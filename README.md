@@ -24,7 +24,11 @@ $ gem install iqeo-conf
 
 ## Usage
 
-### Use a Configuration object directly
+### Defining a configuration
+
+Set values...
+
+#### Defining a Configuration object directly
 
 ```ruby
 conf = Iqeo::Configuration.new
@@ -33,33 +37,23 @@ conf = Iqeo::Configuration.new
 Add some settings
 
 ```ruby
-conf.one 1
-conf.two 2
+conf.alpha 42
+conf.bravo "foobar"
+conf.charlie { :a => 1, :b => 2, :c => 3 }
+conf.delta [ 1, 2, 3 ]
 ```
 
-Retrieve settings
-
-```ruby
-conf.one   => 1
-conf.two   => 2
-```
-
-### Configuration DSL - builder style
+#### Configuration DSL - builder style
 
 ```ruby
 conf = Iqeo::Configuration do |c|
 
-  c.three 3
-  c.four 4
+  conf.alpha 42
+  conf.bravo "foobar"
+  conf.charlie { :a => 1, :b => 2, :c => 3 }
+  conf.delta [ 1, 2, 3 ]
 
 end
-```
-
-Retrieve settings
-
-```ruby
-conf.three   => 3
-conf.four    => 4
 ```
 
 ### Configuration DSL - freestyle
@@ -67,17 +61,23 @@ conf.four    => 4
 ```ruby
 conf = Iqeo::Configuration do
 
-  five 5
-  six 6
+  alpha 42
+  bravo "foobar"
+  charlie { :a => 1, :b => 2, :c => 3 }
+  delta [ 1, 2, 3 ]
 
 end
 ```
 
-Retrieve settings
+### Reading a configuration
+
+Retrieve settings...
 
 ```ruby
-conf.five   => 5
-conf.six    => 6
+conf.alpha 42
+conf.bravo "foobar"
+conf.charlie { :a => 1, :b => 2, :c => 3 }
+conf.delta [ 1, 2, 3 ]
 ```
 
 ## Contributing
