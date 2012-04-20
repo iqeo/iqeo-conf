@@ -72,10 +72,10 @@ end
 Retrieve settings...
 
 ```ruby
-conf.alpha 42
-conf.bravo "foobar"
-conf.charlie { :a => 1, :b => 2, :c => 3 }
-conf.delta [ 1, 2, 3 ]
+conf.alpha      =>  42
+conf.bravo      =>  "foobar"
+conf.charlie    =>  { :a => 1, :b => 2, :c => 3 }
+conf.delta      =>  [ 1, 2, 3 ]
 ```
 
 ## Contributing
