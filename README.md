@@ -32,11 +32,9 @@ Set values...
 
 ```ruby
 conf = Iqeo::Configuration.new
-```
 
-Add some settings
+# add some settings
 
-```ruby
 conf.alpha 42
 conf.bravo "foobar"
 conf.charlie { :a => 1, :b => 2, :c => 3 }
