@@ -26,6 +26,10 @@ $ gem install iqeo-conf
 
 ### Defining a configuration
 
+```ruby
+require 'iqeo/configuration'
+```
+
 Set values...
 
 #### Defining a Configuration object directly
