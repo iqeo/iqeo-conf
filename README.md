@@ -6,79 +6,79 @@ A DSL for writing configuration files.
 
 Add this line to your application's Gemfile:
 
-...
+```
 gem 'iqeo-conf'
-...
+```
 
 And then execute:
 
-...
+```
 $ bundle
-...
+```
 
 Or install it yourself as:
 
-...
+```
 $ gem install iqeo-conf
-...
+```
 
 ## Usage
 
 ### Use a Configuration object directly
 
-...ruby
+```ruby
 conf = Iqeo::Configuration.new
-...
+```
 
 Add some settings
 
-...ruby
+```ruby
 conf.one 1
 conf.two 2
-...
+```
 
 Retrieve settings
 
-...ruby
+```ruby
 conf.one   => 1
 conf.two   => 2
-...
+```
 
 ### Configuration DSL - builder style
 
-...ruby
+```ruby
 conf = Iqeo::Configuration do |c|
 
   c.three 3
   c.four 4
 
 end
-...
+```
 
 Retrieve settings
 
-...ruby
+```ruby
 conf.three   => 3
 conf.four    => 4
-...
+```
 
 ### Configuration DSL - freestyle
 
-...ruby
+```ruby
 conf = Iqeo::Configuration do
 
   five 5
   six 6
 
 end
-...
+```
 
 Retrieve settings
 
-...ruby
+```ruby
 conf.five   => 5
 conf.six    => 6
-...
+```
 
 ## Contributing
 
