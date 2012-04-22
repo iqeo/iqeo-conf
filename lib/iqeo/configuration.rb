@@ -1,12 +1,20 @@
 
 require_relative "configuration/version"
 
+# todo: access to items by hash
+# todo: indifferent hash access
+# todo: nested configurations
+# todo: inherited settings for nested configurations
+# todo: load configurations from string & file
+# todo: load other formats from string & file - YAML, XML?
+
 module Iqeo
 
   class Configuration
 
-    # todo: tests - init without block, with block & param, with plain block
-    # todo: instance_eval vs. yield (arity == 0) ?
+    def self.version
+      VERSION
+    end
 
     def initialize &block
       @items = {}
@@ -19,13 +27,11 @@ module Iqeo
       end
     end
 
-    # todo: tests - with value, without value, multiple values ?, optional '=' with value ?
-    # todo: why does '=' break for instance eval ? - is it actually setting a local variable ???
-
-    def method_missing name, *value
+    def method_missing name, *values
       name = name.to_s.chomp('=').to_sym
-      return @items[name] if value.empty?
-      @items[name] = value.first
+      return @items[name] if values.empty?
+      return @items[name] = values if values.size > 1
+      return @items[name] = values.first
     end
 
   end
