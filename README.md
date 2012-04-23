@@ -4,19 +4,7 @@ A DSL for writing configuration files.
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-```
-gem 'iqeo-conf'
-```
-
-And then execute:
-
-```
-$ bundle
-```
-
-Or install it yourself as:
+It's a gem...
 
 ```
 $ gem install iqeo-conf
@@ -32,7 +20,7 @@ require 'iqeo/configuration'
 
 Set values...
 
-#### Defining a Configuration object directly
+#### Directly on a configuration object
 
 ```ruby
 conf = Iqeo::Configuration.new
@@ -45,7 +33,7 @@ conf.charlie { :a => 1, :b => 2, :c => 3 }
 conf.delta [ 1, 2, 3 ]
 ```
 
-#### Configuration DSL - block yield style
+#### Configuration DSL block yield style
 
 ```ruby
 conf = Iqeo::Configuration.new do |c|
@@ -58,7 +46,7 @@ conf = Iqeo::Configuration.new do |c|
 end
 ```
 
-### Configuration DSL - freestyle
+### Configuration DSL instance_eval style
 
 ```ruby
 conf = Iqeo::Configuration.new do
@@ -82,13 +70,20 @@ conf.charlie    =>  { :a => 1, :b => 2, :c => 3 }
 conf.delta      =>  [ 1, 2, 3 ]
 ```
 
-## Contributing
+## Other features
 
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Added some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+This README may not be complete, see rspec tests for all features.
+
+## Todo
+
+* Access settings by hash
+* Create settings by hash ?
+* Indifferent hash access
+* Nested configurations
+* Inherited settings for nested configurations
+* Load configurations from a string & file
+* Load other formats ? - No need... DSL is just ruby, just do it natively.
+* Blank slate for DSL ?
 
 ## License
 

@@ -86,8 +86,8 @@ describe Configuration do
         conf = Configuration.new
         conf.alpha :a, :b, :c
       end.to_not raise_error
-      conf.should_not be_nil
-      conf.alpha.should == [ :a, :b, :c ] and conf.alpha.should be_an Array
+    conf.should_not be_nil
+    conf.alpha.should == [ :a, :b, :c ] and conf.alpha.should be_an Array
     end
 
   end
@@ -199,6 +199,5 @@ describe Configuration do
     end
 
   end
-
 
 end
