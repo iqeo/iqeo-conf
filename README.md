@@ -76,14 +76,20 @@ This README may not be complete, see rspec tests for all features.
 
 ## Todo
 
-* Access settings by hash
-* Create settings by hash ?
-* Indifferent hash access
-* Nested configurations
-* Inherited settings for nested configurations
-* Load configurations from a string & file
+* Hash operators [] & []= - done!
+* Nested configurations - done!
+* Nested configurations inherit settings
+* Nested configurations override inherited settings
+* Indifferent hash access, symbol, strings, case sensitivity optional ?
+* Iterate over items hash - access to hash / mixin enumerable / delegation to hash ?
+* Load configurations from a string or file at creation
+* Load configurations from a string or file after creation / in DSL
+* Configuration file load path - array of Dir.glob like file specs ?
 * Load other formats ? - No need... DSL is just ruby, just do it natively.
-* Blank slate for DSL ?
+* Blank slate for DSL ? - optional ?
+* Use an existing configuration for defaults
+* Global configuration - watch for collisions ?
+* Consider issues around deferred interpolation / procs / lambdas etc...
 
 ## License
 

@@ -5,31 +5,31 @@ include Iqeo
 
 describe Configuration do
 
-  it 'should report the correct version' do
+  it 'reports the correct version' do
     Configuration.version.should == Configuration::VERSION
   end
 
-  context 'at creation' do
+  context 'creation' do
 
-    it 'should not require a block' do
+    it 'does not require a block' do
       Configuration.new.should be_a Configuration
     end
 
-    it 'should accept a block with arity 0' do
+    it 'accepts a block with arity 0' do
       Configuration.new {  }.should be_a Configuration
     end
 
-    it 'should instance eval block with arity 0' do
+    it 'instance_eval\'s block with arity 0' do
       conf_eval = nil
       conf_new = Configuration.new { conf_eval = self }
       conf_new.should be conf_eval
     end
 
-    it 'should accept a block with arity 1' do
+    it 'accepts a block with arity 1' do
       Configuration.new { |arg| }.should be_a Configuration
     end
 
-    it 'should yield self to block with arity 1' do
+    it 'yields self to block with arity 1' do
       conf_yielded = nil
       conf_new = Configuration.new { |conf| conf_yielded = conf }
       conf_new.should be conf_yielded
@@ -37,9 +37,18 @@ describe Configuration do
 
   end
 
-  context 'instance' do
+  context 'settings retrieval' do
 
-    it 'sets and retrieves simple values' do
+    it 'returns nil for non-existent settings' do
+      conf = Configuration.new
+      conf.not_a_setting.should be_nil
+    end
+
+  end
+
+  context 'single value setting' do
+
+    it 'accepts simple values' do
       conf = nil
       expect do
         conf = Configuration.new
@@ -55,7 +64,7 @@ describe Configuration do
       conf.delta.should == :four   and conf.delta.should be_a Symbol
     end
 
-    it 'sets and retrieves complex values' do
+    it 'accepts complex values' do
       conf = nil
       expect do
         conf = Configuration.new
@@ -75,19 +84,87 @@ describe Configuration do
       conf.bravo[:c].should == 3
     end
 
-    it 'returns nil when retrieving non-existent settings' do
-      conf = Configuration.new
-      conf.not_a_setting.should be_nil
+  end
+
+  context 'multiple value setting' do
+
+    it 'accepts hash without brackets' do
+      conf = nil
+      expect do
+        conf = Configuration.new
+        conf.alpha :a => 1, :b => 2, :c => 3
+      end.to_not raise_error
+      conf.should_not be_nil
+      conf.alpha.should == { :a => 1, :b => 2, :c => 3} and conf.alpha.should be_a Hash
     end
 
-    it 'sets and retrieves multiple values as an array' do
+    it 'treats multiple values as an array' do
       conf = nil
       expect do
         conf = Configuration.new
         conf.alpha :a, :b, :c
       end.to_not raise_error
-    conf.should_not be_nil
-    conf.alpha.should == [ :a, :b, :c ] and conf.alpha.should be_an Array
+      conf.should_not be_nil
+      conf.alpha.should == [ :a, :b, :c ] and conf.alpha.should be_an Array
+    end
+
+    it 'treats hash without brackets after multiple values as last element of array' do
+      conf = nil
+      expect do
+        conf = Configuration.new
+        conf.alpha 1, 2, 3, :a => 4, :b => 5, :c => 6
+      end.to_not raise_error
+      conf.should_not be_nil
+      conf.alpha.should == [ 1, 2, 3, { :a => 4, :b => 5, :c => 6} ] and conf.alpha.should be_a Array
+    end
+
+  end
+
+  context 'hash operators [] & []= access' do
+
+    it 'accepts symbol keys' do
+      conf = nil
+      expect do
+        conf = Configuration.new
+        conf[:alpha] = 1
+      end.to_not raise_error
+      conf[:alpha].should == 1
+    end
+
+    it 'accepts non-symbol (string) keys' do
+      conf = nil
+      expect do
+        conf = Configuration.new
+        conf['alpha'] = 1
+      end.to_not raise_error
+      conf.should_not be_nil
+      conf['alpha'].should == 1
+    end
+
+  end
+
+  context 'nested configuration' do
+
+    it 'is supported' do
+      conf = nil
+      expect do
+        conf = Configuration.new
+        conf.alpha Configuration.new
+        conf.alpha.bravo Configuration.new
+        conf.alpha.bravo.charlie true
+      end.to_not raise_error
+      conf.should_not be_nil
+      conf.alpha.should be_a Configuration
+      conf.alpha.bravo.should be_a Configuration
+      conf.alpha.bravo.charlie.should be_true
+    end
+
+    it 'inherits settings' do
+      pending 'todo'
+    end
+
+    it 'can override inherited settings' do
+      pending 'todo'
     end
 
   end
@@ -144,7 +221,7 @@ describe Configuration do
 
   end
 
-  context 'eval DSL' do
+  context 'instance_eval DSL' do
 
     it 'accepts settings without =' do
       conf = nil
@@ -157,7 +234,7 @@ describe Configuration do
       conf.alpha.should == :value
     end
 
-    it 'set local variables with =' do
+    it 'sets local variables with =' do
       conf = alpha = nil
       expect do
         alpha = nil
