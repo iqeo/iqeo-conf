@@ -72,14 +72,14 @@ conf.delta      =>  [ 1, 2, 3 ]
 
 ## Other features
 
-This README may not be complete, see rspec tests for all features.
+This README may not be complete, see rspec tests for all working features.
 
 ## Todo
 
 * Hash operators [] & []= - done!
 * Nested configurations - done!
-* Nested configurations inherit settings
-* Nested configurations override inherited settings
+* Nested configurations inherit settings - done!
+* Nested configurations override inherited settings - done!
 * Indifferent hash access, symbol, strings, case sensitivity optional ?
 * Iterate over items hash - access to hash / mixin enumerable / delegation to hash ?
 * Load configurations from a string or file at creation

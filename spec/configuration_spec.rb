@@ -159,12 +159,64 @@ describe Configuration do
       conf.alpha.bravo.charlie.should be_true
     end
 
+    it 'knows its parent when referenced directly' do
+      conf = nil
+      expect do
+        conf = Configuration.new
+        conf.alpha Configuration.new
+        conf.alpha.bravo Configuration.new
+        conf.alpha.bravo.charlie true
+      end.to_not raise_error
+      conf.should_not be_nil
+      conf.alpha.bravo.__parent__.should be conf.alpha
+      conf.alpha.__parent__.should be conf
+      conf.__parent__.should be_nil
+    end
+
+    it 'knows its parent when contained in an enumerable' do
+      conf = nil
+      expect do
+        conf = Configuration.new
+        conf.alpha Configuration.new, Configuration.new, Configuration.new
+      end.to_not raise_error
+      conf.should_not be_nil
+      conf.alpha.each { |child| child.__parent__.should be conf }
+      conf.__parent__.should be_nil
+    end
+
     it 'inherits settings' do
-      pending 'todo'
+      conf = nil
+      expect do
+        conf = Configuration.new
+        conf.alpha Configuration.new
+        conf.alpha.bravo Configuration.new
+        conf.top = true
+        conf.alpha.middle = true
+        conf.alpha.bravo.bottom = true
+      end.to_not raise_error
+      conf.should_not be_nil
+      conf.top.should be_true
+      conf.alpha.top.should be_true
+      conf.alpha.middle.should be_true
+      conf.alpha.bravo.top.should be_true
+      conf.alpha.bravo.middle.should be_true
+      conf.alpha.bravo.bottom.should be_true
     end
 
     it 'can override inherited settings' do
-      pending 'todo'
+      conf = nil
+      expect do
+        conf = Configuration.new
+        conf.alpha Configuration.new
+        conf.alpha.bravo Configuration.new
+        conf.level = 1
+        conf.alpha.level = 2
+        conf.alpha.bravo.level = 3
+      end.to_not raise_error
+      conf.should_not be_nil
+      conf.level.should == 1
+      conf.alpha.level.should == 2
+      conf.alpha.bravo.level.should == 3
     end
 
   end
