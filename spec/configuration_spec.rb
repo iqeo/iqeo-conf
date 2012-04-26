@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'iqeo/configuration'
+require 'stringio'
 
 include Iqeo
 
@@ -53,13 +54,13 @@ describe Configuration do
       expect do
         conf = Configuration.new
         conf.alpha 1
-        conf.bravo "two"
+        conf.bravo 'two'
         conf.charlie 3.0
         conf.delta :four
       end.to_not raise_error
       conf.should_not be_nil
       conf.alpha.should   == 1     and conf.alpha.should be_a Fixnum
-      conf.bravo.should   == "two" and conf.bravo.should be_a String
+      conf.bravo.should   == 'two' and conf.bravo.should be_a String
       conf.charlie.should == 3.0   and conf.charlie.should be_a Float
       conf.delta.should == :four   and conf.delta.should be_a Symbol
     end
@@ -328,5 +329,64 @@ describe Configuration do
     end
 
   end
+
+  context 'loads' do
+
+    it 'simple eval DSL from string' do
+      string = "alpha 1\nbravo 'two'\ncharlie 3.0\ndelta :four"
+      conf = nil
+      expect do
+        conf = Configuration.read string
+      end.to_not raise_error
+      conf.should_not be_nil
+      conf.alpha.should   == 1     and conf.alpha.should be_a Fixnum
+      conf.bravo.should   == "two" and conf.bravo.should be_a String
+      conf.charlie.should == 3.0   and conf.charlie.should be_a Float
+      conf.delta.should   == :four and conf.delta.should be_a Symbol
+    end
+
+    it 'simple eval DSL from file (by StringIO fake)' do
+      io = StringIO.new "alpha 1\nbravo 'two'\ncharlie 3.0\ndelta :four"
+      conf = nil
+      expect do
+        conf = Configuration.file io
+      end.to_not raise_error
+      conf.should_not be_nil
+      conf.alpha.should   == 1     and conf.alpha.should be_a Fixnum
+      conf.bravo.should   == "two" and conf.bravo.should be_a String
+      conf.charlie.should == 3.0   and conf.charlie.should be_a Float
+      conf.delta.should   == :four and conf.delta.should be_a Symbol
+    end
+
+    it 'simple eval DSL from file (by mock and expected methods)' do
+      file = mock
+      file.should_receive( :respond_to? ).with( :read ).and_return true
+      file.should_receive( :read ).and_return "alpha 1\nbravo 'two'\ncharlie 3.0\ndelta :four"
+      conf = nil
+      expect do
+        conf = Configuration.file file
+      end.to_not raise_error
+      conf.should_not be_nil
+      conf.alpha.should   == 1     and conf.alpha.should be_a Fixnum
+      conf.bravo.should   == "two" and conf.bravo.should be_a String
+      conf.charlie.should == 3.0   and conf.charlie.should be_a Float
+      conf.delta.should   == :four and conf.delta.should be_a Symbol
+    end
+
+    it 'simple eval DSL from filename (by expected methods)' do
+      File.should_receive( :read ).with( "filename" ).and_return "alpha 1\nbravo 'two'\ncharlie 3.0\ndelta :four"
+      conf = nil
+      expect do
+        conf = Configuration.file "filename"
+      end.to_not raise_error
+      conf.should_not be_nil
+      conf.alpha.should   == 1     and conf.alpha.should be_a Fixnum
+      conf.bravo.should   == "two" and conf.bravo.should be_a String
+      conf.charlie.should == 3.0   and conf.charlie.should be_a Float
+      conf.delta.should   == :four and conf.delta.should be_a Symbol
+    end
+
+  end
+
 
 end

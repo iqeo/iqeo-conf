@@ -19,6 +19,16 @@ module Iqeo
       VERSION
     end
 
+    def self.read string
+      conf = self.new
+      conf.instance_eval string
+      conf
+    end
+
+    def self.file file
+      return self.read file.respond_to?(:read) ? file.read : File.read(file)
+    end
+
     def initialize &block
       @items = {}
       @__parent__ = nil
