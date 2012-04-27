@@ -85,20 +85,22 @@ Need docs...
 * Nested configurations inherit settings - done!
 * Nested configurations override inherited settings - done!
 * Load configurations from a string or file at creation - done!
+* Iterate over items hash - by delegation to hash
 
 ## Todo
 
 Need time (have motivation)...
 
-* Indifferent hash access, symbol, strings, case sensitivity optional ?
-* Iterate over items hash - access to hash / mixin enumerable / delegation to hash ?
-* Load configurations from a string or file after creation / in DSL
-* Configuration file load path - array of Dir.glob like file specs ?
-* Load other formats ? - No need... DSL is just ruby, just do it natively ?
-* Blank slate for DSL ? - optional ?
+* Indifferent hash access
+* Configuration file load path
 * Use an existing configuration for defaults
+* Clean DSL syntax for creating a configuration - just a block ?
+* Load configurations from a string or file after creation / in DSL block
+* Option to get hash directly to prevent polluting namespace with delegated hash methods
+* Blank slate for DSL ? - optional ?
 * Global configuration - watch for collisions ?
-* Consider issues around deferred interpolation / procs / lambdas etc...
+* Issues around deferred interpolation / procs / lambdas etc...
+* Load other formats into configuration - YAML, CSV, ...anything Enumerable should be easy enough.
 
 ## License
 

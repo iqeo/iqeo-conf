@@ -1,14 +1,15 @@
 
 require_relative "configuration/version"
 
-# todo: load configurations from string & file
-# todo: configuration file load path
-# todo: iterate over items hash - access to hash / mixin enumerable / delegation to hash ?
 # todo: indifferent hash access
+# todo: configuration file load path - array of Dir.glob like file specs ?
 # todo: use an existing configuration for defaults
+# todo: clean DSL syntax for creating a configuration - just a block ?
+# todo: load configurations from a string or file after creation / in DSL block
+# todo: option to get hash directly to prevent polluting namespace with delegated hash methods
+# todo: blank slate for DSL - optional ?
 # todo: global configuration - watch for collisions ?
 # todo: deferred interpolation / procs / lambdas etc...
-# todo: blank slate for DSL - optional ?
 # todo: load other formats from string & file - YAML, XML?
 
 module Iqeo
@@ -31,7 +32,7 @@ module Iqeo
 
     def initialize &block
       @items = {}
-      @__parent__ = nil
+      @_parent = nil
       if block_given?
        if block.arity == 1
          yield self
@@ -42,31 +43,38 @@ module Iqeo
     end
 
     def method_missing name, *values
-      case name
-      when :[]= then return __set__ values.shift, values.size > 1 ? values : values.first
-      when :[]  then return __get__ values.shift
+      if @items.respond_to? name
+        return @items.send name, *values
       end
+
+      # this is unreachable since these methods are delegated to @items hash
+      # but keep it around for when we make selective delegation an option
+      #case name
+      #when :[]= then return _set values.shift, values.size > 1 ? values : values.first
+      #when :[]  then return _get values.shift
+      #end
+
       name = name.to_s.chomp('=').to_sym
-      return __get__ name if values.empty?
-      return __set__ name, values if values.size > 1
-      return __set__ name, values.first
+      return _get name if values.empty?
+      return _set name, values if values.size > 1
+      return _set name, values.first
     end
 
-    attr_accessor :__parent__  # todo: should attr_writer be protected ?
+    attr_accessor :_parent  # todo: should attr_writer be protected ?
 
-    def __set__ key, value
-      # todo: extend parenting for values with configurations at arbitrary depth ?
+    def _set key, value
+      # todo: extend parenting for enumerable with configurations at arbitrary depth ?
       case
-      when value.kind_of?( Configuration ) then value.__parent__ = self
-      when value.kind_of?( Enumerable )    then value.each { |v| v.__parent__ = self if v.kind_of? Configuration }
+      when value.kind_of?( Configuration ) then value._parent = self
+      when value.kind_of?( Enumerable )    then value.each { |v| v._parent = self if v.kind_of? Configuration }
       end
       @items[key] = value
     end
 
-    def __get__ key
+    def _get key
       return @items[key] unless @items[key].nil?
-      return @items[key] if  __parent__.nil?
-      return __parent__.__get__ key
+      return @items[key] if  _parent.nil?
+      return _parent._get key
     end
 
  end

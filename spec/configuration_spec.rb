@@ -169,9 +169,9 @@ describe Configuration do
         conf.alpha.bravo.charlie true
       end.to_not raise_error
       conf.should_not be_nil
-      conf.alpha.bravo.__parent__.should be conf.alpha
-      conf.alpha.__parent__.should be conf
-      conf.__parent__.should be_nil
+      conf.alpha.bravo._parent.should be conf.alpha
+      conf.alpha._parent.should be conf
+      conf._parent.should be_nil
     end
 
     it 'knows its parent when contained in an enumerable' do
@@ -181,8 +181,8 @@ describe Configuration do
         conf.alpha Configuration.new, Configuration.new, Configuration.new
       end.to_not raise_error
       conf.should_not be_nil
-      conf.alpha.each { |child| child.__parent__.should be conf }
-      conf.__parent__.should be_nil
+      conf.alpha.each { |child| child._parent.should be conf }
+      conf._parent.should be_nil
     end
 
     it 'inherits settings' do
@@ -388,5 +388,20 @@ describe Configuration do
 
   end
 
+  it 'delegates hash methods to internal hash' do
+    conf = nil
+    expect do
+      conf = Configuration.new
+      conf.alpha 1
+      conf.bravo 'two'
+      conf.charlie 3.0
+      conf.delta :four
+    end.to_not raise_error
+    conf.should_not be_nil
+    expect do
+      conf.each { |k,v| x = v }
+    end.to_not raise_error
+    conf.size.should == 4
+  end
 
 end
