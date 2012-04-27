@@ -1,7 +1,7 @@
 
 require_relative "configuration/version"
+require_relative "configuration/hash_with_indifferent_access"
 
-# todo: indifferent hash access
 # todo: configuration file load path - array of Dir.glob like file specs ?
 # todo: use an existing configuration for defaults
 # todo: clean DSL syntax for creating a configuration - just a block ?
@@ -31,7 +31,7 @@ module Iqeo
     end
 
     def initialize &block
-      @items = {}
+      @items = HashWithIndifferentAccess.new
       @_parent = nil
       if block_given?
        if block.arity == 1
@@ -43,18 +43,14 @@ module Iqeo
     end
 
     def method_missing name, *values
-      if @items.respond_to? name
-        return @items.send name, *values
-      end
-
+      return @items.send name, *values if @items.respond_to? name
       # this is unreachable since these methods are delegated to @items hash
       # but keep it around for when we make selective delegation an option
       #case name
       #when :[]= then return _set values.shift, values.size > 1 ? values : values.first
       #when :[]  then return _get values.shift
       #end
-
-      name = name.to_s.chomp('=').to_sym
+      name = name.to_s.chomp('=')
       return _get name if values.empty?
       return _set name, values if values.size > 1
       return _set name, values.first
@@ -77,7 +73,7 @@ module Iqeo
       return _parent._get key
     end
 
- end
+  end
 
 end
 

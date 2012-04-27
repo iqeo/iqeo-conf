@@ -66,19 +66,15 @@ describe Configuration do
     end
 
     it 'accepts complex values' do
-      conf = nil
-      expect do
-        conf = Configuration.new
-        conf.alpha = [ :a, :b, :c ]
-        conf.bravo = { :a => 1, :b => 2, :c => 3 }
-      end.to_not raise_error
-      conf.should_not be_nil
+      conf = Configuration.new
+      conf.alpha = [ :a, :b, :c ]
+      conf.bravo = { :a => 1, :b => 2, :c => 3 }
       conf.alpha.should == [ :a, :b, :c] and conf.alpha.should be_an Array
       conf.alpha.size.should == 3
       conf.alpha[0].should == :a
       conf.alpha[1].should == :b
       conf.alpha[2].should == :c
-      conf.bravo.should == { :a => 1, :b => 2, :c => 3} and conf.bravo.should be_a Hash
+      conf.bravo.should == { 'a' => 1, 'b' => 2, 'c' => 3} and conf.bravo.should be_a Hash
       conf.bravo.size.should == 3
       conf.bravo[:a].should == 1
       conf.bravo[:b].should == 2
@@ -90,13 +86,9 @@ describe Configuration do
   context 'multiple value setting' do
 
     it 'accepts hash without brackets' do
-      conf = nil
-      expect do
-        conf = Configuration.new
-        conf.alpha :a => 1, :b => 2, :c => 3
-      end.to_not raise_error
-      conf.should_not be_nil
-      conf.alpha.should == { :a => 1, :b => 2, :c => 3} and conf.alpha.should be_a Hash
+      conf = Configuration.new
+      conf.alpha :a => 1, :b => 2, :c => 3
+      conf.alpha.should == { 'a' => 1, 'b' => 2, 'c' => 3} and conf.alpha.should be_a Hash
     end
 
     it 'treats multiple values as an array' do
@@ -110,13 +102,9 @@ describe Configuration do
     end
 
     it 'treats hash without brackets after multiple values as last element of array' do
-      conf = nil
-      expect do
-        conf = Configuration.new
-        conf.alpha 1, 2, 3, :a => 4, :b => 5, :c => 6
-      end.to_not raise_error
-      conf.should_not be_nil
-      conf.alpha.should == [ 1, 2, 3, { :a => 4, :b => 5, :c => 6} ] and conf.alpha.should be_a Array
+      conf = Configuration.new
+      conf.alpha 1, 2, 3, :a => 4, :b => 5, :c => 6
+      conf.alpha.should == [ 1, 2, 3, { 'a' => 4, 'b' => 5, 'c' => 6} ] and conf.alpha.should be_a Array
     end
 
   end

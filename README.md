@@ -80,21 +80,21 @@ This README may not be complete, see rspec tests for all working features.
 
 Need docs...
 
-* Hash operators [] & []= - done!
-* Nested configurations - done!
-* Nested configurations inherit settings - done!
-* Nested configurations override inherited settings - done!
-* Load configurations from a string or file at creation - done!
+* Hash operators [] & []=
+* Nested configurations
+* Nested configurations inherit settings
+* Nested configurations override inherited settings
+* Load configurations from a string or file at creation
 * Iterate over items hash - by delegation to hash
+* Indifferent hash access - using ActiveSupport/HashWithIndifferentAccess
 
 ## Todo
 
 Need time (have motivation)...
 
-* Indifferent hash access
 * Configuration file load path
 * Use an existing configuration for defaults
-* Clean DSL syntax for creating a configuration - just a block ?
+* Clean DSL syntax for creating a nested configuration - just a block ?
 * Load configurations from a string or file after creation / in DSL block
 * Option to get hash directly to prevent polluting namespace with delegated hash methods
 * Blank slate for DSL ? - optional ?
