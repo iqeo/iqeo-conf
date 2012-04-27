@@ -50,7 +50,7 @@ module Iqeo
       #when :[]= then return _set values.shift, values.size > 1 ? values : values.first
       #when :[]  then return _get values.shift
       #end
-      name = name.to_s.chomp('=')
+      name = name.to_s.chomp('=')        # todo: write a test case for a non-string object as key being converted by .to_s
       return _get name if values.empty?
       return _set name, values if values.size > 1
       return _set name, values.first
