@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["gerard.fowley@iqeo.net"]
   gem.description   = %q{A configuration DSL}
   gem.summary       = %q{A DSL for writing configuration files}
-  gem.homepage      = "http://github.com/iqeo/iqeo-conf"
+  gem.homepage      = "http://iqeo.github.com/iqeo-conf"
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   gem.files         = `git ls-files`.split("\n")
   gem.test_files    = `git ls-files -- {spec}/*`.split("\n")
