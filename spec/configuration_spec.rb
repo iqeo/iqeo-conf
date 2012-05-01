@@ -36,7 +36,7 @@ describe Configuration do
       conf_new.should be conf_yielded
     end
 
-  end
+  end # creation
 
   context 'settings retrieval' do
 
@@ -45,7 +45,7 @@ describe Configuration do
       conf.not_a_setting.should be_nil
     end
 
-  end
+  end # settings retrieval
 
   context 'single value setting' do
 
@@ -81,7 +81,7 @@ describe Configuration do
       conf.bravo[:c].should == 3
     end
 
-  end
+  end # single value setting
 
   context 'multiple value setting' do
 
@@ -107,7 +107,7 @@ describe Configuration do
       conf.alpha.should == [ 1, 2, 3, { 'a' => 4, 'b' => 5, 'c' => 6} ] and conf.alpha.should be_a Array
     end
 
-  end
+  end # multiple value setting
 
   context 'hash operators [] & []= access' do
 
@@ -130,7 +130,7 @@ describe Configuration do
       conf['alpha'].should == 1
     end
 
-  end
+  end # hash operators [] & []= access
 
   context 'nested configuration' do
 
@@ -208,120 +208,279 @@ describe Configuration do
       conf.alpha.bravo.level.should == 3
     end
 
-  end
+  end # nested configuration
 
-  context 'yield DSL' do
+  context 'mode of usage' do
 
-    it 'accepts settings without =' do
-      conf = nil
-      expect do
-        conf = Configuration.new do |c|
-          c.alpha :value
-        end
-      end.to_not raise_error
-      conf.should_not be_nil
-      conf.alpha.should == :value
-    end
+    context 'explicit' do
 
-    it 'accepts settings with =' do
-      conf = nil
-      expect do
-        conf = Configuration.new do |c|
-          c.alpha = :value
-        end
-      end.to_not raise_error
-      conf.should_not be_nil
-      conf.alpha.should == :value
-    end
+      it 'accepts settings without =' do
+        conf = nil
+        expect do
+          conf = Configuration.new
+          conf.alpha :value
+        end.to_not raise_error
+        conf.should_not be_nil
+        conf.alpha.should == :value
+      end
 
-    it 'can refer to an existing setting' do
-      conf = nil
-      expect do
-        conf = Configuration.new do |c|
-          c.alpha = :value
-          c.bravo = c.alpha
-          c.charlie c.bravo
-        end
-      end.to_not raise_error
-      conf.should_not be_nil
-      conf.alpha.should == :value
-      conf.bravo.should == :value
-      conf.charlie.should == :value
-    end
+      it 'accepts settings with =' do
+        conf = nil
+        expect do
+          conf = Configuration.new
+          conf.alpha = :value
+        end.to_not raise_error
+        conf.should_not be_nil
+        conf.alpha.should == :value
+      end
 
-    it 'returns value when creating/changing a setting' do
-      conf = nil
-      expect do
-        conf = Configuration.new do |c|
-          c.bravo = c.alpha = :value
-        end
-      end.to_not raise_error
-      conf.alpha.should == :value
-      conf.bravo.should == :value
-    end
+      it 'can refer to an existing setting' do
+        conf = nil
+        expect do
+          conf = Configuration.new
+          conf.alpha = :value
+          conf.bravo = conf.alpha
+          conf.charlie conf.bravo
+        end.to_not raise_error
+        conf.should_not be_nil
+        conf.alpha.should == :value
+        conf.bravo.should == :value
+        conf.charlie.should == :value
+      end
 
-  end
+      it 'returns value when creating/changing a setting' do
+        conf = nil
+        expect do
+          conf = Configuration.new
+          conf.bravo = conf.alpha = :value
+        end.to_not raise_error
+        conf.should_not be_nil
+        conf.alpha.should == :value
+        conf.bravo.should == :value
+      end
 
-  context 'instance_eval DSL' do
+      it 'supports nested configuration via Configuration.new' do
+        conf = nil
+        expect do
+          conf = Configuration.new
+          conf.alpha true
+          conf.bravo Configuration.new
+          conf.bravo.charlie true
+          conf.bravo.delta Configuration.new
+          conf.bravo.delta.echo true
+        end.to_not raise_error
+        conf.should_not be_nil
+        conf.alpha.should be_true
+        conf.bravo.should be_a Configuration
+        conf.bravo.alpha should be_true
+        conf.bravo.charlie should be_true
+        conf.bravo.delta.should be_a Configuration
+        conf.bravo.delta.alpha.should be_true
+        conf.bravo.delta.charlie.should be_true
+        conf.bravo.delta.echo.should be_true
+      end
 
-    it 'accepts settings without =' do
-      conf = nil
-      expect do
-        conf = Configuration.new do
-          alpha :value
-        end
-      end.to_not raise_error
-      conf.should_not be_nil
-      conf.alpha.should == :value
-    end
+    end # explicit
 
-    it 'sets local variables with =' do
-      conf = alpha = nil
-      expect do
-        alpha = nil
-        conf = Configuration.new do
-          alpha = :value
-          bravo alpha
-        end
-      end.to_not raise_error
-      conf.should_not be_nil
-      conf.alpha.should be_nil
-      conf.bravo.should == :value
-      alpha.should == :value        # local alpha set by matching variables
-    end
+    context 'yield DSL' do
 
-    it 'can refer to an existing setting' do
-      conf = nil
-      expect do
-        conf = Configuration.new do |c|
-          c.alpha :value
-          c.bravo c.alpha
-          c.charlie c.bravo
-        end
-      end.to_not raise_error
-      conf.should_not be_nil
-      conf.alpha.should == :value
-      conf.bravo.should == :value
-      conf.charlie.should == :value
-    end
+      it 'accepts settings without =' do
+        conf = nil
+        expect do
+          conf = Configuration.new do |c|
+            c.alpha :value
+          end
+        end.to_not raise_error
+        conf.should_not be_nil
+        conf.alpha.should == :value
+      end
 
-    it 'returns value when creating/changing a setting' do
-      conf = nil
-      expect do
-        conf = Configuration.new do
-          bravo alpha :value
-        end
-      end.to_not raise_error
-      conf.alpha.should == :value
-      conf.bravo.should == :value
-    end
+      it 'accepts settings with =' do
+        conf = nil
+        expect do
+          conf = Configuration.new do |c|
+            c.alpha = :value
+          end
+        end.to_not raise_error
+        conf.should_not be_nil
+        conf.alpha.should == :value
+      end
 
-  end
+      it 'can refer to an existing setting' do
+        conf = nil
+        expect do
+          conf = Configuration.new do |c|
+            c.alpha = :value
+            c.bravo = c.alpha
+            c.charlie c.bravo
+          end
+        end.to_not raise_error
+        conf.should_not be_nil
+        conf.alpha.should == :value
+        conf.bravo.should == :value
+        conf.charlie.should == :value
+      end
+
+      it 'returns value when creating/changing a setting' do
+        conf = nil
+        expect do
+          conf = Configuration.new do |c|
+            c.bravo = c.alpha = :value
+          end
+        end.to_not raise_error
+        conf.should_not be_nil
+        conf.alpha.should == :value
+        conf.bravo.should == :value
+      end
+
+      it 'supports nested configuration via do..end' do
+        conf = nil
+        expect do
+          conf = Configuration.new do |c1|
+            c1.alpha true
+            c1.bravo do |c2|
+              c2.charlie true
+              c2.delta do |c3|
+                c3.echo true
+              end
+            end
+          end
+        end.to_not raise_error
+        conf.should_not be_nil
+        conf.alpha.should be_true
+        conf.bravo.should be_a Configuration
+        conf.bravo.alpha should be_true
+        conf.bravo.charlie should be_true
+        conf.bravo.delta.should be_a Configuration
+        conf.bravo.delta.alpha.should be_true
+        conf.bravo.delta.charlie.should be_true
+        conf.bravo.delta.echo.should be_true
+      end
+
+      it 'supports nested configuration via {..}' do
+        conf = nil
+        expect do
+          conf = Configuration.new { |c1| c1.alpha true ; c1.bravo { |c2| c2.charlie true ; c2.delta { |c3| c3.echo true } } }
+        end.to_not raise_error
+        conf.should_not be_nil
+        conf.alpha.should be_true
+        conf.bravo.should be_a Configuration
+        conf.bravo.alpha should be_true
+        conf.bravo.charlie should be_true
+        conf.bravo.delta.should be_a Configuration
+        conf.bravo.delta.alpha.should be_true
+        conf.bravo.delta.charlie.should be_true
+        conf.bravo.delta.echo.should be_true
+      end
+
+    end # yield DSL
+
+    context 'instance_eval DSL' do
+
+      it 'accepts settings without =' do
+        conf = nil
+        expect do
+          conf = Configuration.new do
+            alpha :value
+          end
+        end.to_not raise_error
+        conf.should_not be_nil
+        conf.alpha.should == :value
+      end
+
+      it 'sets local variables with =' do
+        conf = alpha = nil
+        expect do
+          alpha = nil
+          conf = Configuration.new do
+            alpha = :value
+            bravo alpha
+          end
+        end.to_not raise_error
+        conf.should_not be_nil
+        conf.alpha.should be_nil
+        conf.bravo.should == :value
+        alpha.should == :value        # local alpha set by matching variables
+      end
+
+      it 'can refer to an existing setting' do
+        conf = nil
+        expect do
+          conf = Configuration.new do
+            alpha :value
+            bravo alpha
+            charlie bravo
+          end
+        end.to_not raise_error
+        conf.should_not be_nil
+        conf.alpha.should == :value
+        conf.bravo.should == :value
+        conf.charlie.should == :value
+      end
+
+      it 'returns value when creating/changing a setting' do
+        conf = nil
+        expect do
+          conf = Configuration.new do
+            bravo alpha :value
+          end
+        end.to_not raise_error
+        conf.should_not be_nil
+        conf.alpha.should == :value
+        conf.bravo.should == :value
+      end
+
+      it 'supports nested configuration via do..end' do
+        conf = nil
+        expect do
+          conf = Configuration.new do
+            alpha true
+            bravo do
+              charlie true
+              delta do
+                echo true
+              end
+            end
+          end
+        end.to_not raise_error
+        conf.should_not be_nil
+        conf.alpha.should be_true
+        conf.bravo.should be_a Configuration
+        conf.bravo.alpha should be_true
+        conf.bravo.charlie should be_true
+        conf.bravo.delta.should be_a Configuration
+        conf.bravo.delta.alpha.should be_true
+        conf.bravo.delta.charlie.should be_true
+        conf.bravo.delta.echo.should be_true
+      end
+
+      it 'supports nested configuration via {..}' do
+        conf = nil
+        expect do
+          conf = Configuration.new { |c1| c1.alpha true ; c1.bravo { |c2| c2.charlie true ; c2.delta { |c3| c3.echo true } } }
+        end.to_not raise_error
+        conf.should_not be_nil
+        conf.alpha.should be_true
+        conf.bravo.should be_a Configuration
+        conf.bravo.alpha should be_true
+        conf.bravo.charlie should be_true
+        conf.bravo.delta.should be_a Configuration
+        conf.bravo.delta.alpha.should be_true
+        conf.bravo.delta.charlie.should be_true
+        conf.bravo.delta.echo.should be_true
+      end
+
+    end # instance_eval DSL
+
+  end # mode of usage
 
   context 'loads' do
 
     it 'simple eval DSL from string' do
-      string = "alpha 1\nbravo 'two'\ncharlie 3.0\ndelta :four"
+      string = "alpha 1
+                bravo 'two'
+                charlie 3.0
+                delta :four"
       conf = nil
       expect do
         conf = Configuration.read string
@@ -334,7 +493,10 @@ describe Configuration do
     end
 
     it 'simple eval DSL from file (by StringIO fake)' do
-      io = StringIO.new "alpha 1\nbravo 'two'\ncharlie 3.0\ndelta :four"
+      io = StringIO.new  "alpha 1
+                          bravo 'two'
+                          charlie 3.0
+                          delta :four"
       conf = nil
       expect do
         conf = Configuration.file io
@@ -349,7 +511,10 @@ describe Configuration do
     it 'simple eval DSL from file (by mock and expected methods)' do
       file = mock
       file.should_receive( :respond_to? ).with( :read ).and_return true
-      file.should_receive( :read ).and_return "alpha 1\nbravo 'two'\ncharlie 3.0\ndelta :four"
+      file.should_receive( :read ).and_return  "alpha 1
+                                                bravo 'two'
+                                                charlie 3.0
+                                                delta :four"
       conf = nil
       expect do
         conf = Configuration.file file
@@ -362,7 +527,10 @@ describe Configuration do
     end
 
     it 'simple eval DSL from filename (by expected methods)' do
-      File.should_receive( :read ).with( "filename" ).and_return "alpha 1\nbravo 'two'\ncharlie 3.0\ndelta :four"
+      File.should_receive( :read ).with( "filename" ).and_return "alpha 1
+                                                                  bravo 'two'
+                                                                  charlie 3.0
+                                                                  delta :four"
       conf = nil
       expect do
         conf = Configuration.file "filename"
@@ -374,7 +542,30 @@ describe Configuration do
       conf.delta.should   == :four and conf.delta.should be_a Symbol
     end
 
-  end
+    it 'complex eval DSL from string' do
+      string = "alpha true
+                bravo Configuration.new do
+                  charlie true
+                  delta Configuration.new do
+                    echo true
+                  end
+                end"
+      conf = nil
+      expect do
+        conf = Configuration.read string
+      end.to_not raise_error
+      conf.should_not be_nil
+      conf.alpha.should be_true
+      conf.bravo.should be_a Configuration
+      conf.bravo.alpha should be_true
+      conf.bravo.charlie should be_true
+      conf.bravo.delta.should be_a Configuration
+      conf.bravo.delta.alpha.should be_true
+      conf.bravo.delta.charlie.should be_true
+      conf.bravo.delta.echo.should be_true
+    end
+
+  end # loads
 
   it 'delegates hash methods to internal hash' do
     conf = nil

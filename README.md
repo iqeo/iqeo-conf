@@ -98,8 +98,7 @@ Need time (have motivation)...
 * Load configurations from a string or file after creation / in DSL block
 * Option to get hash directly to prevent polluting namespace with delegated hash methods
 * Blank slate for DSL ? - optional ?
-* Global configuration - watch for collisions ?
-* Issues around deferred interpolation / procs / lambdas etc...
+* Consider issues around deferred interpolation / procs / lambdas etc...
 * Load other formats into configuration - YAML, CSV, ...anything Enumerable should be easy enough.
 
 ## License

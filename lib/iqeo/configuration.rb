@@ -2,15 +2,15 @@
 require_relative "configuration/version"
 require_relative "configuration/hash_with_indifferent_access"
 
+# fix: nested configurations broken for DSL !!
+# todo: clean DSL syntax for creating a configuration - just a block ?
 # todo: configuration file load path - array of Dir.glob like file specs ?
 # todo: use an existing configuration for defaults
-# todo: clean DSL syntax for creating a configuration - just a block ?
 # todo: load configurations from a string or file after creation / in DSL block
 # todo: option to get hash directly to prevent polluting namespace with delegated hash methods
 # todo: blank slate for DSL - optional ?
-# todo: global configuration - watch for collisions ?
-# todo: deferred interpolation / procs / lambdas etc...
-# todo: load other formats from string & file - YAML, XML?
+# todo: consider issues around deferred interpolation / procs / lambdas etc...
+# todo: load other formats from string & file - YAML, CSV, ...anything Enumerable should be easy enough.
 
 module Iqeo
 
@@ -42,8 +42,8 @@ module Iqeo
       end
     end
 
-    def method_missing name, *values
-      return @items.send name, *values if @items.respond_to? name
+    def method_missing name, *values, &block
+      return @items.send name, *values if @items.respond_to? name    # @items methods are highest priority
       # this is unreachable since these methods are delegated to @items hash
       # but keep it around for when we make selective delegation an option
       #case name
@@ -51,9 +51,10 @@ module Iqeo
       #when :[]  then return _get values.shift
       #end
       name = name.to_s.chomp('=')        # todo: write a test case for a non-string object as key being converted by .to_s
-      return _get name if values.empty?
-      return _set name, values if values.size > 1
-      return _set name, values.first
+      return _set name, Configuration.new( &block ) if block_given?  # block is a nested configuration
+      return _get name if values.empty?                              # just get item
+      return _set name, values if values.size > 1                    # set item to multiple values
+      return _set name, values.first                                 # set item to single value
     end
 
     attr_accessor :_parent  # todo: should attr_writer be protected ?
