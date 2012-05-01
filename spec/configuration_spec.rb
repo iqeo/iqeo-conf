@@ -476,7 +476,7 @@ describe Configuration do
 
   context 'loads' do
 
-    it 'simple eval DSL from string' do
+    it 'simple instance_eval DSL from string' do
       string = "alpha 1
                 bravo 'two'
                 charlie 3.0
@@ -492,7 +492,7 @@ describe Configuration do
       conf.delta.should   == :four and conf.delta.should be_a Symbol
     end
 
-    it 'simple eval DSL from file (by StringIO fake)' do
+    it 'simple instance_eval DSL from file (by StringIO fake)' do
       io = StringIO.new  "alpha 1
                           bravo 'two'
                           charlie 3.0
@@ -508,7 +508,7 @@ describe Configuration do
       conf.delta.should   == :four and conf.delta.should be_a Symbol
     end
 
-    it 'simple eval DSL from file (by mock and expected methods)' do
+    it 'simple instance_eval DSL from file (by mock and expected methods)' do
       file = mock
       file.should_receive( :respond_to? ).with( :read ).and_return true
       file.should_receive( :read ).and_return  "alpha 1
@@ -526,7 +526,7 @@ describe Configuration do
       conf.delta.should   == :four and conf.delta.should be_a Symbol
     end
 
-    it 'simple eval DSL from filename (by expected methods)' do
+    it 'simple instance_eval DSL from filename (by expected methods)' do
       File.should_receive( :read ).with( "filename" ).and_return "alpha 1
                                                                   bravo 'two'
                                                                   charlie 3.0
@@ -542,11 +542,11 @@ describe Configuration do
       conf.delta.should   == :four and conf.delta.should be_a Symbol
     end
 
-    it 'complex eval DSL from string' do
+    it 'complex instance_eval DSL from string' do
       string = "alpha true
-                bravo Configuration.new do
+                bravo do
                   charlie true
-                  delta Configuration.new do
+                  delta do
                     echo true
                   end
                 end"
