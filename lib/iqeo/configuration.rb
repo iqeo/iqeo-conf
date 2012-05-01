@@ -30,31 +30,48 @@ module Iqeo
       return self.read file.respond_to?(:read) ? file.read : File.read(file)
     end
 
+    def self.new_defer_block_for_parent parent, &block
+      conf = Configuration.new
+      conf._parent = parent
+      if block_given? && block.arity == 1
+        block.call(conf)                                              # this is 'yield self' from the outside
+      else
+        raise "WTF! expected a block with a single parameter"
+      end
+      conf
+    end
+
     def initialize &block
       @items = HashWithIndifferentAccess.new
       @_parent = nil
       if block_given?
-       if block.arity == 1
-         yield self
-       else
-         instance_eval &block
-       end
+        if block.arity == 1                                           # cannot set parent for yield blocks here as self is wrong !?
+          yield self
+        else
+          if block.binding.eval('self').kind_of?( Configuration )     # for eval block if nested configuration
+            @_parent = block.binding.eval('self')                     # set parent to make inherited values available
+          end                                                         # during block execution
+          instance_eval &block
+        end
       end
     end
 
     def method_missing name, *values, &block
-      return @items.send name, *values if @items.respond_to? name    # @items methods are highest priority
-      # this is unreachable since these methods are delegated to @items hash
-      # but keep it around for when we make selective delegation an option
-      #case name
-      #when :[]= then return _set values.shift, values.size > 1 ? values : values.first
-      #when :[]  then return _get values.shift
-      #end
+      return @items.send name, *values if @items.respond_to? name     # @items methods are highest priority
+
       name = name.to_s.chomp('=')        # todo: write a test case for a non-string object as key being converted by .to_s
-      return _set name, Configuration.new( &block ) if block_given?  # block is a nested configuration
-      return _get name if values.empty?                              # just get item
-      return _set name, values if values.size > 1                    # set item to multiple values
-      return _set name, values.first                                 # set item to single value
+
+      if block_given?                                                 # block is a nested configuration
+        if block.arity == 1                                           # yield DSL needs deferred block to set parent without binding
+          return _set name, Configuration.new_defer_block_for_parent( self, &block )
+        else
+          return _set name, Configuration.new( &block )               # eval DSL can set parent from block binding in initialize
+        end
+      end
+
+      return _get name if values.empty?                               # just get item
+      return _set name, values if values.size > 1                     # set item to multiple values
+      return _set name, values.first                                  # set item to single value
     end
 
     attr_accessor :_parent  # todo: should attr_writer be protected ?

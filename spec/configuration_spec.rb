@@ -373,6 +373,36 @@ describe Configuration do
         conf.bravo.delta.echo.should be_true
       end
 
+      it 'nested configuration can refer to an inherited setting' do
+        conf = nil
+        expect do
+          conf = Configuration.new do |c1|
+            c1.alpha true
+            c1.hotel c1.alpha
+            c1.bravo do |c2|
+              c2.charlie true
+              c2.foxtrot c2.alpha
+              c2.delta do |c3|
+                c3.echo true
+                c3.golf c3.alpha
+              end
+            end
+          end
+        end.to_not raise_error
+        conf.should_not be_nil
+        conf.alpha.should be_true
+        conf.bravo.should be_a Configuration
+        conf.bravo.alpha should be_true
+        conf.bravo.charlie should be_true
+        conf.bravo.delta.should be_a Configuration
+        conf.bravo.delta.alpha.should be_true
+        conf.bravo.delta.charlie.should be_true
+        conf.bravo.delta.echo.should be_true
+        conf.bravo.delta.golf.should be_true
+        conf.bravo.foxtrot.should be_true
+        conf.hotel.should be_true
+      end
+
     end # yield DSL
 
     context 'instance_eval DSL' do
@@ -468,6 +498,36 @@ describe Configuration do
         conf.bravo.delta.alpha.should be_true
         conf.bravo.delta.charlie.should be_true
         conf.bravo.delta.echo.should be_true
+      end
+
+      it 'nested configuration can refer to an inherited setting' do
+        conf = nil
+        expect do
+          conf = Configuration.new do
+            alpha true
+            hotel alpha
+            bravo do
+              charlie true
+              foxtrot alpha
+              delta do
+                echo true
+                golf alpha
+              end
+            end
+          end
+        end.to_not raise_error
+        conf.should_not be_nil
+        conf.alpha.should be_true
+        conf.bravo.should be_a Configuration
+        conf.bravo.alpha should be_true
+        conf.bravo.charlie should be_true
+        conf.bravo.delta.should be_a Configuration
+        conf.bravo.delta.alpha.should be_true
+        conf.bravo.delta.charlie.should be_true
+        conf.bravo.delta.echo.should be_true
+        conf.bravo.delta.golf.should be_true
+        conf.bravo.foxtrot.should be_true
+        conf.hotel.should be_true
       end
 
     end # instance_eval DSL
