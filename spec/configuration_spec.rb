@@ -632,14 +632,16 @@ describe Configuration do
     expect do
       conf = Configuration.new
       conf.alpha 1
-      conf.bravo 'two'
-      conf.charlie 3.0
-      conf.delta :four
+      conf.bravo 2
+      conf.charlie 3
+      conf.delta 4
     end.to_not raise_error
     conf.should_not be_nil
+    sum = 0
     expect do
-      conf.each { |k,v| x = v }
+      conf.each { |k,v| sum += v }
     end.to_not raise_error
+    sum.should == 10
     conf.size.should == 4
   end
 

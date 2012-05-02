@@ -57,7 +57,7 @@ module Iqeo
     end
 
     def method_missing name, *values, &block
-      return @items.send name, *values if @items.respond_to? name     # @items methods are highest priority
+      return @items.send( name, *values, &block ) if @items.respond_to? name     # @items methods are highest priority
 
       name = name.to_s.chomp('=')        # todo: write a test case for a non-string object as key being converted by .to_s
 
