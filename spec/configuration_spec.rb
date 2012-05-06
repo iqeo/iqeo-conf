@@ -530,6 +530,60 @@ describe Configuration do
         conf.hotel.should be_true
       end
 
+      it 'dynamic setting name can be a local' do
+        conf = nil
+        expect do
+          conf = Configuration.new do
+            alpha true
+            local1 = 'bravo'
+            self[local1] = true
+            local2 = 'charlie'
+            self[local2] = true
+          end
+        end.to_not raise_error
+        conf.should_not be_nil
+        conf.alpha.should be_true
+        conf.bravo.should be_true
+        conf.charlie.should be_true
+      end
+
+      it 'dynamic setting name can be a setting' do
+        conf = nil
+        expect do
+          conf = Configuration.new do
+            alpha true
+            setting1 'bravo'
+            self[setting1] = true
+            setting2 'charlie'
+            self[setting2] = true
+          end
+        end.to_not raise_error
+        conf.should_not be_nil
+        conf.alpha.should be_true
+        conf.bravo.should be_true
+        conf.charlie.should be_true
+        conf.setting1.should == 'bravo'
+        conf.setting2.should == 'charlie'
+      end
+
+      it 'dynamic setting can reference a nested configuration' do
+        conf = nil
+        expect do
+          conf = Configuration.new do
+            alpha true
+            local = :bravo
+            self[local] = Configuration.new do
+              charlie true
+            end
+          end
+        end.to_not raise_error
+        conf.should_not be_nil
+        conf.alpha.should be_true
+        conf.bravo.should be_a Configuration
+        conf.bravo.alpha should be_true
+        conf.bravo.charlie should be_true
+      end
+
     end # instance_eval DSL
 
   end # mode of usage

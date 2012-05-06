@@ -2,8 +2,6 @@
 require_relative "configuration/version"
 require_relative "configuration/hash_with_indifferent_access"
 
-# fix: nested configurations broken for DSL !!
-# todo: clean DSL syntax for creating a configuration - just a block ?
 # todo: configuration file load path - array of Dir.glob like file specs ?
 # todo: use an existing configuration for defaults
 # todo: load configurations from a string or file after creation / in DSL block
@@ -84,12 +82,14 @@ module Iqeo
       end
       @items[key] = value
     end
+    alias []= _set
 
     def _get key
       return @items[key] unless @items[key].nil?
       return @items[key] if  _parent.nil?
       return _parent._get key
     end
+    alias [] _get
 
   end
 
