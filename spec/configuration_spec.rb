@@ -518,6 +518,90 @@ describe Configuration do
 
       end # nested configuration
 
+      context 'can load' do
+
+        it 'settings into the current configuration from a string' do
+          conf = nil
+          expect do
+            conf = Configuration.new do |c|
+              c.alpha true
+              c._read "bravo true\ncharlie true"
+            end
+          end.to_not raise_error
+          conf.should_not be_nil
+          conf.alpha.should be_true
+          conf.bravo.should be_true
+          conf.charlie.should be_true
+        end
+
+        it 'settings into the current configuration from a file (StringIO)' do
+          io = StringIO.new "bravo true
+                             charlie true"
+          conf = nil
+          expect do
+            conf = Configuration.new do |c|
+              c.alpha true
+              c._file io
+            end
+          end.to_not raise_error
+          conf.should_not be_nil
+          conf.alpha.should be_true
+          conf.bravo.should be_true
+          conf.charlie.should be_true
+        end
+
+        it 'settings into a nested configuration from a string' do
+          conf = nil
+          expect do
+            conf = Configuration.new do |c|
+              c.alpha true
+              c.bravo do |x|
+                x._read "charlie true\ndelta true"
+              end
+              c.echo { |x| x._read "foxtrot true\nhotel true" }
+            end
+          end.to_not raise_error
+          conf.should_not be_nil
+          conf.alpha.should be_true
+          conf.bravo.should be_a Configuration
+          conf.bravo.charlie.should be_true
+          conf.bravo.delta.should be_true
+          conf.bravo.alpha.should be_true
+          conf.echo.should be_a Configuration
+          conf.echo.foxtrot.should be_true
+          conf.echo.hotel.should be_true
+          conf.echo.alpha.should be_true
+        end
+
+        it 'settings into a nested configuration from a file (StringIO)' do
+          io1 = StringIO.new "charlie true
+                              delta true"
+          io2 = StringIO.new "foxtrot true
+                              hotel true"
+          conf = nil
+          expect do
+            conf = Configuration.new do |c|
+              c.alpha true
+              c.bravo do |x|
+                x._file io1
+              end
+              c.echo { |x| x._file io2 }
+            end
+          end.to_not raise_error
+          conf.should_not be_nil
+          conf.alpha.should be_true
+          conf.bravo.should be_a Configuration
+          conf.bravo.charlie.should be_true
+          conf.bravo.delta.should be_true
+          conf.bravo.alpha.should be_true
+          conf.echo.should be_a Configuration
+          conf.echo.foxtrot.should be_true
+          conf.echo.hotel.should be_true
+          conf.echo.alpha.should be_true
+        end
+
+      end # can load
+
     end # yield DSL
 
     context 'instance_eval DSL' do
