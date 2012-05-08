@@ -87,6 +87,8 @@ Need docs...
 * Load configurations from a string or file at creation
 * Iterate over items hash - by delegation to hash
 * Indifferent hash access - using ActiveSupport/HashWithIndifferentAccess
+* Clean DSL syntax for creating a nested configuration - just a block ?
+* Load configurations from a string or file after creation / in DSL block
 
 ## Todo
 
@@ -94,10 +96,8 @@ Need time (have motivation)...
 
 * Configuration file load path
 * Use an existing configuration for defaults
-* Clean DSL syntax for creating a nested configuration - just a block ?
-* Load configurations from a string or file after creation / in DSL block
-* Option to get hash directly to prevent polluting namespace with delegated hash methods
 * Blank slate for DSL ? - optional ?
+* Option to get hash directly to prevent polluting namespace with delegated hash methods
 * Consider issues around deferred interpolation / procs / lambdas etc...
 * Load other formats into configuration - YAML, CSV, ...anything Enumerable should be easy enough.
 
