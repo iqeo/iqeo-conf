@@ -4,9 +4,8 @@ require_relative "configuration/hash_with_indifferent_access"
 
 # todo: configuration file load path - array of Dir.glob like file specs ?
 # todo: use an existing configuration for defaults
-# todo: load configurations from a string or file after creation / in DSL block
-# todo: option to get hash directly to prevent polluting namespace with delegated hash methods
 # todo: blank slate for DSL - optional ?
+# todo: option to get hash directly to prevent polluting namespace with delegated hash methods
 # todo: consider issues around deferred interpolation / procs / lambdas etc...
 # todo: load other formats from string & file - YAML, CSV, ...anything Enumerable should be easy enough.
 
@@ -57,7 +56,7 @@ module Iqeo
     def method_missing name, *values, &block
       return @items.send( name, *values, &block ) if @items.respond_to? name     # @items methods are highest priority
 
-      name = name.to_s.chomp('=')        # todo: write a test case for a non-string object as key being converted by .to_s
+      name = name.to_s.chomp('=')
 
       if block_given?                                                 # block is a nested configuration
         if block.arity == 1                                           # yield DSL needs deferred block to set parent without binding
@@ -72,10 +71,10 @@ module Iqeo
       return _set name, values.first                                  # set item to single value
     end
 
-    attr_accessor :_parent  # todo: should attr_writer be protected ?
+    attr_accessor :_parent
 
     def _set key, value
-      # todo: extend parenting for enumerable with configurations at arbitrary depth ?
+      # fix: extend parenting for enumerable with configurations at arbitrary depth
       case
       when value.kind_of?( Configuration ) then value._parent = self
       when value.kind_of?( Enumerable )    then value.each { |v| v._parent = self if v.kind_of? Configuration }
@@ -87,9 +86,17 @@ module Iqeo
     def _get key
       return @items[key] unless @items[key].nil?
       return @items[key] if  _parent.nil?
-      return _parent._get key
+      _parent._get key
     end
     alias [] _get
+
+    def _read string
+      instance_eval string
+    end
+
+    def _file file
+      _read file.respond_to?(:read) ? file.read : File.read(file)
+    end
 
   end
 
