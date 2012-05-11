@@ -61,7 +61,7 @@ describe Configuration do
                             delta :four"
         conf = nil
         expect do
-          conf = Configuration.file io
+          conf = Configuration.load io
         end.to_not raise_error
         conf.should_not be_nil
         conf.alpha.should   == 1     and conf.alpha.should be_a Fixnum
@@ -79,7 +79,7 @@ describe Configuration do
                                                   delta :four"
         conf = nil
         expect do
-          conf = Configuration.file file
+          conf = Configuration.load file
         end.to_not raise_error
         conf.should_not be_nil
         conf.alpha.should   == 1     and conf.alpha.should be_a Fixnum
@@ -95,7 +95,7 @@ describe Configuration do
                                                                     delta :four"
         conf = nil
         expect do
-          conf = Configuration.file "filename"
+          conf = Configuration.load "filename"
         end.to_not raise_error
         conf.should_not be_nil
         conf.alpha.should   == 1     and conf.alpha.should be_a Fixnum
@@ -541,7 +541,7 @@ describe Configuration do
           expect do
             conf = Configuration.new do |c|
               c.alpha true
-              c._file io
+              c._load io
             end
           end.to_not raise_error
           conf.should_not be_nil
@@ -583,9 +583,9 @@ describe Configuration do
             conf = Configuration.new do |c|
               c.alpha true
               c.bravo do |x|
-                x._file io1
+                x._load io1
               end
-              c.echo { |x| x._file io2 }
+              c.echo { |x| x._load io2 }
             end
           end.to_not raise_error
           conf.should_not be_nil
@@ -814,7 +814,7 @@ describe Configuration do
           expect do
             conf = Configuration.new do
               alpha true
-              _file io
+              _load io
             end
           end.to_not raise_error
           conf.should_not be_nil
@@ -856,9 +856,9 @@ describe Configuration do
             conf = Configuration.new do
               alpha true
               bravo do
-                _file io1
+                _load io1
               end
-              echo { _file io2 }
+              echo { _load io2 }
             end
           end.to_not raise_error
           conf.should_not be_nil

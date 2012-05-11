@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+<title>class Iqeo::Configuration - RDoc Documentation</title>
+
+<link type="text/css" media="screen" href="../rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/darkfish.js"></script>
+
+
+<body id="top" class="class">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="../index.html">Home</a>
+    <a href="../table_of_contents.html#classes">Classes</a>
+    <a href="../table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
+
+
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
+
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
+
+
+  <div id="file-metadata">
+    <nav id="file-list-section" class="section">
+  <h3 class="section-header">Defined In</h3>
+  <ul>
+    <li>lib/iqeo/configuration/version.rb
+    <li>lib/iqeo/configuration.rb
+  </ul>
+</nav>
+
+    
+  </div>
+
+  <div id="class-metadata">
+    
+    <nav id="parent-class-section" class="section">
+  <h3 class="section-header">Parent</h3>
+  
+  <p class="link">Object
+  
+</nav>
+
+    
+    <!-- Method Quickref -->
+<nav id="method-list-section" class="section">
+  <h3 class="section-header">Methods</h3>
+
+  <ul class="link-list">
+    
+    <li><a href="#method-c-load">::load</a>
+    
+    <li><a href="#method-c-new">::new</a>
+    
+    <li><a href="#method-c-new_defer_block_for_parent">::new_defer_block_for_parent</a>
+    
+    <li><a href="#method-c-read">::read</a>
+    
+    <li><a href="#method-c-version">::version</a>
+    
+    <li><a href="#method-i-5B-5D">#[]</a>
+    
+    <li><a href="#method-i-5B-5D-3D">#[]=</a>
+    
+    <li><a href="#method-i-_get">#_get</a>
+    
+    <li><a href="#method-i-_load">#_load</a>
+    
+    <li><a href="#method-i-_read">#_read</a>
+    
+    <li><a href="#method-i-_set">#_set</a>
+    
+    <li><a href="#method-i-method_missing">#method_missing</a>
+    
+  </ul>
+</nav>
+
+  </div>
+
+  <div id="project-metadata">
+    <nav id="fileindex-section" class="section project-section">
+  <h3 class="section-header">Pages</h3>
+
+  <ul>
+  
+    <li class="file"><a href="../README_rdoc.html">README</a>
+  
+  </ul>
+</nav>
+
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="../Iqeo.html">Iqeo</a>
+  
+    <li><a href="../Iqeo/Configuration.html">Iqeo::Configuration</a>
+  
+  </ul>
+</nav>
+
+  </div>
+</nav>
+
+<div id="documentation">
+  <h1 class="class">class Iqeo::Configuration</h1>
+
+  <div id="description" class="description">
+    
+  </div><!-- description -->
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+    <!-- Constants -->
+    <section id="constants-list" class="section">
+      <h3 class="section-header">Constants</h3>
+      <dl>
+      
+        <dt id="VERSION">VERSION
+        
+        <dd class="description">
+        
+      
+      </dl>
+    </section>
+    
+
+    
+    <!-- Attributes -->
+    <section id="attribute-method-details" class="method-section section">
+      <h3 class="section-header">Attributes</h3>
+
+      
+      <div id="attribute-i-_parent" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">_parent</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        
+        
+        </div>
+      </div>
+      
+    </section><!-- attribute-method-details -->
+    
+
+    <!-- Methods -->
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Class Methods</h3>
+
+    
+      <div id="method-c-load" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">load</span><span
+            class="method-args">(file)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="load-source">
+            <pre><span class="ruby-comment"># File lib/iqeo/configuration.rb, line 128</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load</span> <span class="ruby-identifier">file</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">read</span> <span class="ruby-identifier">file</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:read</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">file</span>.<span class="ruby-identifier">read</span> <span class="ruby-operator">:</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>(<span class="ruby-identifier">file</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- load-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- load-method -->
+
+    
+      <div id="method-c-new" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">new</span><span
+            class="method-args">() { |self| ... }</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="new-source">
+            <pre><span class="ruby-comment"># File lib/iqeo/configuration.rb, line 143</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span> &amp;<span class="ruby-identifier">block</span>
+  <span class="ruby-ivar">@items</span> = <span class="ruby-constant">HashWithIndifferentAccess</span>.<span class="ruby-identifier">new</span>
+  <span class="ruby-ivar">@_parent</span> = <span class="ruby-keyword">nil</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>.<span class="ruby-identifier">arity</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>                                           <span class="ruby-comment"># cannot set parent for yield blocks here as self is wrong !?</span>
+      <span class="ruby-keyword">yield</span> <span class="ruby-keyword">self</span>
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>.<span class="ruby-identifier">binding</span>.<span class="ruby-identifier">eval</span>(<span class="ruby-string">'self'</span>).<span class="ruby-identifier">kind_of?</span>( <span class="ruby-constant">Configuration</span> )     <span class="ruby-comment"># for eval block if nested configuration</span>
+        <span class="ruby-ivar">@_parent</span> = <span class="ruby-identifier">block</span>.<span class="ruby-identifier">binding</span>.<span class="ruby-identifier">eval</span>(<span class="ruby-string">'self'</span>)                     <span class="ruby-comment"># set parent to make inherited values available</span>
+      <span class="ruby-keyword">end</span>                                                         <span class="ruby-comment"># during block execution</span>
+      <span class="ruby-identifier">instance_eval</span> &amp;<span class="ruby-identifier">block</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- new-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- new-method -->
+
+    
+      <div id="method-c-new_defer_block_for_parent" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">new_defer_block_for_parent</span><span
+            class="method-args">(parent, &block)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="new_defer_block_for_parent-source">
+            <pre><span class="ruby-comment"># File lib/iqeo/configuration.rb, line 132</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">new_defer_block_for_parent</span> <span class="ruby-identifier">parent</span>, &amp;<span class="ruby-identifier">block</span>
+  <span class="ruby-identifier">conf</span> = <span class="ruby-constant">Configuration</span>.<span class="ruby-identifier">new</span>
+  <span class="ruby-identifier">conf</span>.<span class="ruby-identifier">_parent</span> = <span class="ruby-identifier">parent</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">block</span>.<span class="ruby-identifier">arity</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
+    <span class="ruby-identifier">block</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">conf</span>)                                              <span class="ruby-comment"># this is 'yield self' from the outside</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;WTF! expected a block with a single parameter&quot;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">conf</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- new_defer_block_for_parent-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- new_defer_block_for_parent-method -->
+
+    
+      <div id="method-c-read" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">read</span><span
+            class="method-args">(string)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="read-source">
+            <pre><span class="ruby-comment"># File lib/iqeo/configuration.rb, line 122</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">read</span> <span class="ruby-identifier">string</span>
+  <span class="ruby-identifier">conf</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">new</span>
+  <span class="ruby-identifier">conf</span>.<span class="ruby-identifier">instance_eval</span> <span class="ruby-identifier">string</span>
+  <span class="ruby-identifier">conf</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- read-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- read-method -->
+
+    
+      <div id="method-c-version" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">version</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="version-source">
+            <pre><span class="ruby-comment"># File lib/iqeo/configuration.rb, line 118</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">version</span>
+  <span class="ruby-constant">VERSION</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- version-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- version-method -->
+
+    
+    </section><!-- public-class-method-details -->
+  
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Instance Methods</h3>
+
+    
+      <div id="method-i-5B-5D" class="method-detail method-alias">
+        
+        <div class="method-heading">
+          <span class="method-name">[]</span><span
+            class="method-args">(key)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+        </div>
+
+        
+
+        
+        <div class="aliases">
+          Alias for: <a href="Configuration.html#method-i-_get">_get</a>
+        </div>
+        
+      </div><!-- 5B-5D-method -->
+
+    
+      <div id="method-i-5B-5D-3D" class="method-detail method-alias">
+        
+        <div class="method-heading">
+          <span class="method-name">[]=</span><span
+            class="method-args">(key, value)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+        </div>
+
+        
+
+        
+        <div class="aliases">
+          Alias for: <a href="Configuration.html#method-i-_set">_set</a>
+        </div>
+        
+      </div><!-- 5B-5D-3D-method -->
+
+    
+      <div id="method-i-_get" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">_get</span><span
+            class="method-args">(key)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="_get-source">
+            <pre><span class="ruby-comment"># File lib/iqeo/configuration.rb, line 188</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">_get</span> <span class="ruby-identifier">key</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-ivar">@items</span>[<span class="ruby-identifier">key</span>] <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@items</span>[<span class="ruby-identifier">key</span>].<span class="ruby-identifier">nil?</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-ivar">@items</span>[<span class="ruby-identifier">key</span>] <span class="ruby-keyword">if</span>  <span class="ruby-identifier">_parent</span>.<span class="ruby-identifier">nil?</span>
+  <span class="ruby-identifier">_parent</span>.<span class="ruby-identifier">_get</span> <span class="ruby-identifier">key</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- _get-source -->
+          
+        </div>
+
+        
+        <div class="aliases">
+          Also aliased as: <a href="Configuration.html#method-i-5B-5D">[]</a>
+        </div>
+        
+
+        
+      </div><!-- _get-method -->
+
+    
+      <div id="method-i-_load" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">_load</span><span
+            class="method-args">(file)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="_load-source">
+            <pre><span class="ruby-comment"># File lib/iqeo/configuration.rb, line 199</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">_load</span> <span class="ruby-identifier">file</span>
+  <span class="ruby-identifier">_read</span> <span class="ruby-identifier">file</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:read</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">file</span>.<span class="ruby-identifier">read</span> <span class="ruby-operator">:</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>(<span class="ruby-identifier">file</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- _load-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- _load-method -->
+
+    
+      <div id="method-i-_read" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">_read</span><span
+            class="method-args">(string)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="_read-source">
+            <pre><span class="ruby-comment"># File lib/iqeo/configuration.rb, line 195</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">_read</span> <span class="ruby-identifier">string</span>
+  <span class="ruby-identifier">instance_eval</span> <span class="ruby-identifier">string</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- _read-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- _read-method -->
+
+    
+      <div id="method-i-_set" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">_set</span><span
+            class="method-args">(key, value)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="_set-source">
+            <pre><span class="ruby-comment"># File lib/iqeo/configuration.rb, line 178</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">_set</span> <span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span>
+  <span class="ruby-comment"># fix: extend parenting for enumerable with configurations at arbitrary depth</span>
+  <span class="ruby-keyword">case</span>
+  <span class="ruby-keyword">when</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">kind_of?</span>( <span class="ruby-constant">Configuration</span> ) <span class="ruby-keyword">then</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">_parent</span> = <span class="ruby-keyword">self</span>
+  <span class="ruby-keyword">when</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">kind_of?</span>( <span class="ruby-constant">Enumerable</span> )    <span class="ruby-keyword">then</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">_parent</span> = <span class="ruby-keyword">self</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">kind_of?</span> <span class="ruby-constant">Configuration</span> }
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-ivar">@items</span>[<span class="ruby-identifier">key</span>] = <span class="ruby-identifier">value</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- _set-source -->
+          
+        </div>
+
+        
+        <div class="aliases">
+          Also aliased as: <a href="Configuration.html#method-i-5B-5D-3D">[]=</a>
+        </div>
+        
+
+        
+      </div><!-- _set-method -->
+
+    
+      <div id="method-i-method_missing" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">method_missing</span><span
+            class="method-args">(name, *values, &block)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="method_missing-source">
+            <pre><span class="ruby-comment"># File lib/iqeo/configuration.rb, line 158</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">method_missing</span> <span class="ruby-identifier">name</span>, *<span class="ruby-identifier">values</span>, &amp;<span class="ruby-identifier">block</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-ivar">@items</span>.<span class="ruby-identifier">send</span>( <span class="ruby-identifier">name</span>, *<span class="ruby-identifier">values</span>, &amp;<span class="ruby-identifier">block</span> ) <span class="ruby-keyword">if</span> <span class="ruby-ivar">@items</span>.<span class="ruby-identifier">respond_to?</span> <span class="ruby-identifier">name</span>     <span class="ruby-comment"># @items methods are highest priority</span>
+
+  <span class="ruby-identifier">name</span> = <span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">chomp</span>(<span class="ruby-string">'='</span>)
+
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>                                                 <span class="ruby-comment"># block is a nested configuration</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>.<span class="ruby-identifier">arity</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>                                           <span class="ruby-comment"># yield DSL needs deferred block to set parent without binding</span>
+      <span class="ruby-keyword">return</span> <span class="ruby-identifier">_set</span> <span class="ruby-identifier">name</span>, <span class="ruby-constant">Configuration</span>.<span class="ruby-identifier">new_defer_block_for_parent</span>( <span class="ruby-keyword">self</span>, &amp;<span class="ruby-identifier">block</span> )
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-keyword">return</span> <span class="ruby-identifier">_set</span> <span class="ruby-identifier">name</span>, <span class="ruby-constant">Configuration</span>.<span class="ruby-identifier">new</span>( &amp;<span class="ruby-identifier">block</span> )               <span class="ruby-comment"># eval DSL can set parent from block binding in initialize</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">_get</span> <span class="ruby-identifier">name</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">values</span>.<span class="ruby-identifier">empty?</span>                               <span class="ruby-comment"># just get item</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">_set</span> <span class="ruby-identifier">name</span>, <span class="ruby-identifier">values</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">values</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>                     <span class="ruby-comment"># set item to multiple values</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">_set</span> <span class="ruby-identifier">name</span>, <span class="ruby-identifier">values</span>.<span class="ruby-identifier">first</span>                                  <span class="ruby-comment"># set item to single value</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- method_missing-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- method_missing-method -->
+
+    
+    </section><!-- public-instance-method-details -->
+  
+  </section><!-- 5Buntitled-5D -->
+
+</div><!-- documentation -->
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.12.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
+

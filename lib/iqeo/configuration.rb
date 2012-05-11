@@ -2,12 +2,114 @@
 require_relative "configuration/version"
 require_relative "configuration/hash_with_indifferent_access"
 
-# todo: configuration file load path - array of Dir.glob like file specs ?
 # todo: use an existing configuration for defaults
 # todo: blank slate for DSL - optional ?
 # todo: option to get hash directly to prevent polluting namespace with delegated hash methods
 # todo: consider issues around deferred interpolation / procs / lambdas etc...
 # todo: load other formats from string & file - YAML, CSV, ...anything Enumerable should be easy enough.
+
+# todo: rdoc readme and documentation
+
+=begin
+  Title
+    blurb...
+
+  Installation
+    gem...
+
+  Usage
+
+    Create configuration
+      modes of usage...
+
+      Explicit
+        example...
+
+        conf = Configuration.new
+        conf.alpha 1
+        conf.bravo 2.0
+        conf.charlie :three
+        conf.delta "four"
+        conf.echo Configuration.new
+        conf.echo.foxtrot true
+
+      Block DSL
+        example... yield
+
+        conf = Configuration.new do |c|
+          c.alpha 1
+          c.bravo 2.0
+          c.charlie :three
+          c.delta "four"
+          c.echo do |e|
+            e.foxtrot true
+          end
+        end
+
+      Eval DSL
+        example... instance_eval
+
+        conf = Configuration.new do
+          alpha 1
+          bravo 2.0
+          charlie :three
+          delta "four"
+          echo do
+            foxtrot true
+          end
+        end
+
+    Read configuration
+      examples...
+
+        method access
+
+          conf.alpha        => 1
+          conf.bravo        => 2.0
+          conf.charlie      => :three
+          conf.delta        => "four"
+          conf.echo         => Configuration...
+          conf.echo.foxtrot => true
+
+        string access
+
+          conf['alpha']             => 1
+          conf['bravo']             => 2.0
+          conf['charlie']           => :three
+          conf['delta']             => "four"
+          conf['echo']              => Configuration...
+          conf['echo']['foxtrot']   => true
+
+        symbol access
+
+          conf[:alpha]           => 1
+          conf[:bravo]           => 2.0
+          conf[:charlie]         => :three
+          conf[:delta]           => "four"
+          conf[:echo]            => Configuration...
+          conf[:echo][:foxtrot]  => true
+
+        enumerable hash
+
+          conf.collect { |key,value| value }  => [ 1, 2.0, :three, 'four' ]  ... + nested configuration ?
+
+        inheritance
+
+  Features
+    Per mode
+      setting value
+      setting/local = value
+      existing setting + override
+      nesting
+      inherited setting + override
+      load from string + file, merge + nest
+      [] and []= methods + self
+      + merge
+      + defaults
+      + blank slate
+
+=end
+
 
 module Iqeo
 
@@ -23,7 +125,7 @@ module Iqeo
       conf
     end
 
-    def self.file file
+    def self.load file
       return self.read file.respond_to?(:read) ? file.read : File.read(file)
     end
 
@@ -94,7 +196,7 @@ module Iqeo
       instance_eval string
     end
 
-    def _file file
+    def _load file
       _read file.respond_to?(:read) ? file.read : File.read(file)
     end
 

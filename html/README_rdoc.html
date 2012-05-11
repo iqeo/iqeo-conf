@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+<title>README - RDoc Documentation</title>
+
+<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="./js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/darkfish.js"></script>
+
+
+<body class="file">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="./index.html">Home</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
+
+
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
+
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
+
+
+  <div id="project-metadata">
+    <nav id="fileindex-section" class="section project-section">
+  <h3 class="section-header">Pages</h3>
+
+  <ul>
+  
+    <li class="file"><a href="./README_rdoc.html">README</a>
+  
+  </ul>
+</nav>
+
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./Iqeo.html">Iqeo</a>
+  
+    <li><a href="./Iqeo/Configuration.html">Iqeo::Configuration</a>
+  
+  </ul>
+</nav>
+
+  </div>
+</nav>
+
+<div id="documentation" class="description">
+  
+<p># <a href="Iqeo/Configuration.html">Iqeo::Configuration</a></p>
+
+<p>A DSL for writing configuration files.</p>
+
+<p>## Installation</p>
+
+<p>It’s a gem…</p>
+
+<p>“` $ gem install iqeo-conf “`</p>
+
+<p>## Usage</p>
+
+<p>Require it…</p>
+
+<p>“`ruby require ‘iqeo/configuration’ “`</p>
+
+<p>### Create a configuration</p>
+
+<p>Set values…</p>
+
+<p>#### Directly on a configuration object</p>
+
+<p>“`ruby conf = <a
+href="Iqeo/Configuration.html#method-c-new">Iqeo::Configuration.new</a></p>
+
+<p># add some settings</p>
+
+<p>conf.alpha 42 conf.bravo “foobar” conf.charlie { :a =&gt; 1, :b =&gt; 2, :c
+=&gt; 3 } conf.delta [ 1, 2, 3 ] “`</p>
+
+<p>#### Configuration DSL block yield style</p>
+
+<p>“`ruby conf = <a
+href="Iqeo/Configuration.html#method-c-new">Iqeo::Configuration.new</a> do
+|c|</p>
+
+<pre class="ruby"><span class="ruby-identifier">c</span>.<span class="ruby-identifier">alpha</span> <span class="ruby-value">42</span>
+<span class="ruby-identifier">c</span>.<span class="ruby-identifier">bravo</span> <span class="ruby-string">&quot;foobar&quot;</span>
+<span class="ruby-identifier">c</span>.<span class="ruby-identifier">charlie</span> { :<span class="ruby-identifier">a</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>, :<span class="ruby-identifier">b</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">2</span>, :<span class="ruby-identifier">c</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">3</span> }
+<span class="ruby-identifier">c</span>.<span class="ruby-identifier">delta</span> [ <span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span> ]
+</pre>
+
+<p>end “`</p>
+
+<p>#### Configuration DSL instance_eval style</p>
+
+<p>“`ruby conf = <a
+href="Iqeo/Configuration.html#method-c-new">Iqeo::Configuration.new</a> do</p>
+
+<pre class="ruby"><span class="ruby-identifier">alpha</span> <span class="ruby-value">42</span>
+<span class="ruby-identifier">bravo</span> <span class="ruby-string">&quot;foobar&quot;</span>
+<span class="ruby-identifier">charlie</span> { :<span class="ruby-identifier">a</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>, :<span class="ruby-identifier">b</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">2</span>, :<span class="ruby-identifier">c</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">3</span> }
+<span class="ruby-identifier">delta</span> [ <span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span> ]
+</pre>
+
+<p>end “`</p>
+
+<p>### Reading a configuration</p>
+
+<p>Retrieve settings…</p>
+
+<p>“`ruby conf.alpha      =&gt;  42 conf.bravo      =&gt;  “foobar”
+conf.charlie    =&gt;  { :a =&gt; 1, :b =&gt; 2, :c =&gt; 3 } conf.delta   
+=&gt;  [ 1, 2, 3 ] “`</p>
+
+<p>## Other features</p>
+
+<p>This <a href="README_rdoc.html">README</a> may not be complete, see rspec
+tests for all working features.</p>
+
+<p>## Done</p>
+
+<p>Need docs…</p>
+<ul><li>
+<p>Hash operators [] &amp; []=</p>
+</li><li>
+<p>Nested configurations</p>
+</li><li>
+<p>Nested configurations inherit settings</p>
+</li><li>
+<p>Nested configurations override inherited settings</p>
+</li><li>
+<p>Load configurations from a string or file at creation</p>
+</li><li>
+<p>Iterate over items hash - by delegation to hash</p>
+</li><li>
+<p>Indifferent hash access - using ActiveSupport/HashWithIndifferentAccess</p>
+</li><li>
+<p>Clean DSL syntax for creating a nested configuration - just a block ?</p>
+</li><li>
+<p>Load configurations from a string or file after creation / in DSL block</p>
+</li></ul>
+
+<p>## Todo</p>
+
+<p>Need time (have motivation)…</p>
+<ul><li>
+<p>Configuration file load path</p>
+</li><li>
+<p>Use an existing configuration for defaults</p>
+</li><li>
+<p>Blank slate for DSL ? - optional ?</p>
+</li><li>
+<p>Option to get hash directly to prevent polluting namespace with delegated
+hash methods</p>
+</li><li>
+<p>Consider issues around deferred interpolation / procs / lambdas etc…</p>
+</li><li>
+<p>Load other formats into configuration - YAML, CSV, …anything Enumerable
+should be easy enough.</p>
+</li></ul>
+
+<p>## License</p>
+
+<p>Licensed under GPL Version 3 license See LICENSE file</p>
+
+</div>
+
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.12.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
+
