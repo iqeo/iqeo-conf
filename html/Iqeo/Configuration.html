@@ -131,6 +131,10 @@
 
   <div id="description" class="description">
     
+<p><a href="Configuration.html">Configuration</a> class.</p>
+
+<p>A DSL representing configuration files.</p>
+
   </div><!-- description -->
 
   
@@ -149,7 +153,7 @@
       
         <dt id="VERSION">VERSION
         
-        <dd class="description">
+        <dd class="description"><p>Current semantic version number</p>
         
       
       </dl>
@@ -195,12 +199,13 @@
 
         <div class="method-description">
           
-          
+          <p>Creates a new <a href="Configuration.html">Configuration</a> instance from
+filename or File/IO object. Content should be in Eval DSL format.</p>
           
 
           
           <div class="method-source-code" id="load-source">
-            <pre><span class="ruby-comment"># File lib/iqeo/configuration.rb, line 128</span>
+            <pre><span class="ruby-comment"># File lib/iqeo/configuration.rb, line 36</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load</span> <span class="ruby-identifier">file</span>
   <span class="ruby-keyword">return</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">read</span> <span class="ruby-identifier">file</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:read</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">file</span>.<span class="ruby-identifier">read</span> <span class="ruby-operator">:</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>(<span class="ruby-identifier">file</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -230,7 +235,7 @@
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File lib/iqeo/configuration.rb, line 143</span>
+            <pre><span class="ruby-comment"># File lib/iqeo/configuration.rb, line 51</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span> &amp;<span class="ruby-identifier">block</span>
   <span class="ruby-ivar">@items</span> = <span class="ruby-constant">HashWithIndifferentAccess</span>.<span class="ruby-identifier">new</span>
   <span class="ruby-ivar">@_parent</span> = <span class="ruby-keyword">nil</span>
@@ -271,7 +276,7 @@
 
           
           <div class="method-source-code" id="new_defer_block_for_parent-source">
-            <pre><span class="ruby-comment"># File lib/iqeo/configuration.rb, line 132</span>
+            <pre><span class="ruby-comment"># File lib/iqeo/configuration.rb, line 40</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">new_defer_block_for_parent</span> <span class="ruby-identifier">parent</span>, &amp;<span class="ruby-identifier">block</span>
   <span class="ruby-identifier">conf</span> = <span class="ruby-constant">Configuration</span>.<span class="ruby-identifier">new</span>
   <span class="ruby-identifier">conf</span>.<span class="ruby-identifier">_parent</span> = <span class="ruby-identifier">parent</span>
@@ -303,12 +308,13 @@
 
         <div class="method-description">
           
-          
+          <p>Creates a new <a href="Configuration.html">Configuration</a> instance from
+string. Content should be in Eval DSL format.</p>
           
 
           
           <div class="method-source-code" id="read-source">
-            <pre><span class="ruby-comment"># File lib/iqeo/configuration.rb, line 122</span>
+            <pre><span class="ruby-comment"># File lib/iqeo/configuration.rb, line 28</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">read</span> <span class="ruby-identifier">string</span>
   <span class="ruby-identifier">conf</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">new</span>
   <span class="ruby-identifier">conf</span>.<span class="ruby-identifier">instance_eval</span> <span class="ruby-identifier">string</span>
@@ -335,12 +341,12 @@
 
         <div class="method-description">
           
-          
+          <p>Returns <a href="Configuration.html">Configuration</a> version number.</p>
           
 
           
           <div class="method-source-code" id="version-source">
-            <pre><span class="ruby-comment"># File lib/iqeo/configuration.rb, line 118</span>
+            <pre><span class="ruby-comment"># File lib/iqeo/configuration.rb, line 22</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">version</span>
   <span class="ruby-constant">VERSION</span>
 <span class="ruby-keyword">end</span></pre>
@@ -425,12 +431,14 @@
 
         <div class="method-description">
           
-          
+          <p>Retrieves value for key. Indifferent storage permits key to be a string or
+symbol. If configuration is nested, searches for key recursively up to
+root. Returns nil if key does not exist.</p>
           
 
           
           <div class="method-source-code" id="_get-source">
-            <pre><span class="ruby-comment"># File lib/iqeo/configuration.rb, line 188</span>
+            <pre><span class="ruby-comment"># File lib/iqeo/configuration.rb, line 100</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">_get</span> <span class="ruby-identifier">key</span>
   <span class="ruby-keyword">return</span> <span class="ruby-ivar">@items</span>[<span class="ruby-identifier">key</span>] <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@items</span>[<span class="ruby-identifier">key</span>].<span class="ruby-identifier">nil?</span>
   <span class="ruby-keyword">return</span> <span class="ruby-ivar">@items</span>[<span class="ruby-identifier">key</span>] <span class="ruby-keyword">if</span>  <span class="ruby-identifier">_parent</span>.<span class="ruby-identifier">nil?</span>
@@ -466,7 +474,7 @@
 
           
           <div class="method-source-code" id="_load-source">
-            <pre><span class="ruby-comment"># File lib/iqeo/configuration.rb, line 199</span>
+            <pre><span class="ruby-comment"># File lib/iqeo/configuration.rb, line 111</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">_load</span> <span class="ruby-identifier">file</span>
   <span class="ruby-identifier">_read</span> <span class="ruby-identifier">file</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:read</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">file</span>.<span class="ruby-identifier">read</span> <span class="ruby-operator">:</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>(<span class="ruby-identifier">file</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -496,7 +504,7 @@
 
           
           <div class="method-source-code" id="_read-source">
-            <pre><span class="ruby-comment"># File lib/iqeo/configuration.rb, line 195</span>
+            <pre><span class="ruby-comment"># File lib/iqeo/configuration.rb, line 107</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">_read</span> <span class="ruby-identifier">string</span>
   <span class="ruby-identifier">instance_eval</span> <span class="ruby-identifier">string</span>
 <span class="ruby-keyword">end</span></pre>
@@ -526,7 +534,7 @@
 
           
           <div class="method-source-code" id="_set-source">
-            <pre><span class="ruby-comment"># File lib/iqeo/configuration.rb, line 178</span>
+            <pre><span class="ruby-comment"># File lib/iqeo/configuration.rb, line 86</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">_set</span> <span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span>
   <span class="ruby-comment"># fix: extend parenting for enumerable with configurations at arbitrary depth</span>
   <span class="ruby-keyword">case</span>
@@ -565,7 +573,7 @@
 
           
           <div class="method-source-code" id="method_missing-source">
-            <pre><span class="ruby-comment"># File lib/iqeo/configuration.rb, line 158</span>
+            <pre><span class="ruby-comment"># File lib/iqeo/configuration.rb, line 66</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">method_missing</span> <span class="ruby-identifier">name</span>, *<span class="ruby-identifier">values</span>, &amp;<span class="ruby-identifier">block</span>
   <span class="ruby-keyword">return</span> <span class="ruby-ivar">@items</span>.<span class="ruby-identifier">send</span>( <span class="ruby-identifier">name</span>, *<span class="ruby-identifier">values</span>, &amp;<span class="ruby-identifier">block</span> ) <span class="ruby-keyword">if</span> <span class="ruby-ivar">@items</span>.<span class="ruby-identifier">respond_to?</span> <span class="ruby-identifier">name</span>     <span class="ruby-comment"># @items methods are highest priority</span>
 

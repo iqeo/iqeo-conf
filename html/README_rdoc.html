@@ -71,121 +71,149 @@
 
 <div id="documentation" class="description">
   
-<p># <a href="Iqeo/Configuration.html">Iqeo::Configuration</a></p>
+<h1 id="label-Iqeo%3A%3AConfiguration"><a href="Iqeo/Configuration.html">Iqeo::Configuration</a></h1>
 
-<p>A DSL for writing configuration files.</p>
+<p>A DSL representing configuration files.</p>
 
-<p>## Installation</p>
+<h2 id="label-Installation">Installation</h2>
 
-<p>It’s a gem…</p>
+<p>It’s a gem:</p>
 
-<p>“` $ gem install iqeo-conf “`</p>
+<pre>$ gem install iqeo-conf</pre>
 
-<p>## Usage</p>
+<h2 id="label-Usage">Usage</h2>
 
-<p>Require it…</p>
+<p>Require ‘iqeo/configuration’ and optionally include <a
+href="Iqeo.html">Iqeo</a> namespace:</p>
 
-<p>“`ruby require ‘iqeo/configuration’ “`</p>
-
-<p>### Create a configuration</p>
-
-<p>Set values…</p>
-
-<p>#### Directly on a configuration object</p>
-
-<p>“`ruby conf = <a
-href="Iqeo/Configuration.html#method-c-new">Iqeo::Configuration.new</a></p>
-
-<p># add some settings</p>
-
-<p>conf.alpha 42 conf.bravo “foobar” conf.charlie { :a =&gt; 1, :b =&gt; 2, :c
-=&gt; 3 } conf.delta [ 1, 2, 3 ] “`</p>
-
-<p>#### Configuration DSL block yield style</p>
-
-<p>“`ruby conf = <a
-href="Iqeo/Configuration.html#method-c-new">Iqeo::Configuration.new</a> do
-|c|</p>
-
-<pre class="ruby"><span class="ruby-identifier">c</span>.<span class="ruby-identifier">alpha</span> <span class="ruby-value">42</span>
-<span class="ruby-identifier">c</span>.<span class="ruby-identifier">bravo</span> <span class="ruby-string">&quot;foobar&quot;</span>
-<span class="ruby-identifier">c</span>.<span class="ruby-identifier">charlie</span> { :<span class="ruby-identifier">a</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>, :<span class="ruby-identifier">b</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">2</span>, :<span class="ruby-identifier">c</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">3</span> }
-<span class="ruby-identifier">c</span>.<span class="ruby-identifier">delta</span> [ <span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span> ]
+<pre class="ruby"><span class="ruby-identifier">require</span> <span class="ruby-string">'iqeo/configuration'</span>
+<span class="ruby-identifier">include</span> <span class="ruby-constant">Iqeo</span>
 </pre>
 
-<p>end “`</p>
+<h3 id="label-Create+configuration">Create configuration</h3>
 
-<p>#### Configuration DSL instance_eval style</p>
+<p>Supports three ways to create configurations; explicit, block DSL, eval
+DSL.</p>
 
-<p>“`ruby conf = <a
-href="Iqeo/Configuration.html#method-c-new">Iqeo::Configuration.new</a> do</p>
+<h4 id="label-Explicit">Explicit</h4>
 
-<pre class="ruby"><span class="ruby-identifier">alpha</span> <span class="ruby-value">42</span>
-<span class="ruby-identifier">bravo</span> <span class="ruby-string">&quot;foobar&quot;</span>
-<span class="ruby-identifier">charlie</span> { :<span class="ruby-identifier">a</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>, :<span class="ruby-identifier">b</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">2</span>, :<span class="ruby-identifier">c</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">3</span> }
-<span class="ruby-identifier">delta</span> [ <span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span> ]
+<p>Call Configuration#new without a block.</p>
+
+<p>Explicitly call methods on instance to configure instance.</p>
+
+<pre class="ruby"><span class="ruby-identifier">conf</span> = <span class="ruby-constant">Configuration</span>.<span class="ruby-identifier">new</span>             <span class="ruby-comment"># =&gt; #&lt;Iqeo::Configuration:0x........&gt;</span>
+<span class="ruby-identifier">conf</span>.<span class="ruby-identifier">alpha</span>   <span class="ruby-value">1</span>
+<span class="ruby-identifier">conf</span>.<span class="ruby-identifier">bravo</span>   <span class="ruby-value">2.0</span>
+<span class="ruby-identifier">conf</span>.<span class="ruby-identifier">charlie</span> :<span class="ruby-identifier">three</span>
+<span class="ruby-identifier">conf</span>.<span class="ruby-identifier">delta</span>   <span class="ruby-string">&quot;four&quot;</span>
 </pre>
 
-<p>end “`</p>
+<h4 id="label-Block+DSL">Block DSL</h4>
 
-<p>### Reading a configuration</p>
+<p>Call Configuration#new with a block that expects a variable, a new instance
+will be yielded.</p>
 
-<p>Retrieve settings…</p>
+<p>Within block, call methods on yielded instance to configure.</p>
 
-<p>“`ruby conf.alpha      =&gt;  42 conf.bravo      =&gt;  “foobar”
-conf.charlie    =&gt;  { :a =&gt; 1, :b =&gt; 2, :c =&gt; 3 } conf.delta   
-=&gt;  [ 1, 2, 3 ] “`</p>
+<pre class="ruby"><span class="ruby-identifier">conf</span> = <span class="ruby-constant">Configuration</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">c</span>.<span class="ruby-identifier">alpha</span>   <span class="ruby-value">1</span>
+  <span class="ruby-identifier">c</span>.<span class="ruby-identifier">bravo</span>   <span class="ruby-value">2.0</span>
+  <span class="ruby-identifier">c</span>.<span class="ruby-identifier">charlie</span> :<span class="ruby-identifier">three</span>
+  <span class="ruby-identifier">c</span>.<span class="ruby-identifier">delta</span>   <span class="ruby-string">&quot;four&quot;</span>
+<span class="ruby-keyword">end</span>                                  <span class="ruby-comment"># =&gt; #&lt;Iqeo::Configuration:0x........&gt;</span>
+</pre>
 
-<p>## Other features</p>
+<h4 id="label-Eval+DSL">Eval DSL</h4>
 
-<p>This <a href="README_rdoc.html">README</a> may not be complete, see rspec
-tests for all working features.</p>
+<p>Call Configuration#new with a block that does not expect a variable,
+contents of the block are eval’d in the context of the new instance.</p>
 
-<p>## Done</p>
+<p>Call methods with implied self to configure instance.</p>
 
-<p>Need docs…</p>
+<pre class="ruby"><span class="ruby-identifier">conf</span> = <span class="ruby-constant">Configuration</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-identifier">alpha</span>   <span class="ruby-value">1</span>
+  <span class="ruby-identifier">bravo</span>   <span class="ruby-value">2.0</span>
+  <span class="ruby-identifier">charlie</span> :<span class="ruby-identifier">three</span>
+  <span class="ruby-identifier">delta</span>   <span class="ruby-string">&quot;four&quot;</span>
+<span class="ruby-keyword">end</span>                                  <span class="ruby-comment"># =&gt; #&lt;Iqeo::Configuration:0x........&gt;</span>
+</pre>
+
+<h3 id="label-Read+configuration">Read configuration</h3>
+
+<p>All examples above result in the same configuration. Configuration settings
+can be retrieved directly in three ways:</p>
+
+<h4 id="label-Named+method">Named method</h4>
+
+<pre class="ruby"><span class="ruby-identifier">conf</span>.<span class="ruby-identifier">alpha</span>        <span class="ruby-comment"># =&gt; 1</span>
+<span class="ruby-identifier">conf</span>.<span class="ruby-identifier">bravo</span>        <span class="ruby-comment"># =&gt; 2.0</span>
+<span class="ruby-identifier">conf</span>.<span class="ruby-identifier">charlie</span>      <span class="ruby-comment"># =&gt; :three</span>
+<span class="ruby-identifier">conf</span>.<span class="ruby-identifier">delta</span>        <span class="ruby-comment"># =&gt; &quot;four&quot;</span>
+</pre>
+
+<h4 id="label-%5B+%27string%27+%5D">[ ‘string’ ]</h4>
+
+<pre class="ruby"><span class="ruby-identifier">conf</span>[<span class="ruby-string">'alpha'</span>]     <span class="ruby-comment"># =&gt; 1</span>
+<span class="ruby-identifier">conf</span>[<span class="ruby-string">'bravo'</span>]     <span class="ruby-comment"># =&gt; 2.0</span>
+<span class="ruby-identifier">conf</span>[<span class="ruby-string">'charlie'</span>]   <span class="ruby-comment"># =&gt; :three</span>
+<span class="ruby-identifier">conf</span>[<span class="ruby-string">'delta'</span>]     <span class="ruby-comment"># =&gt; &quot;four&quot;</span>
+</pre>
+
+<h4 id="label-%5B+%3Asymbol+%5D">[ :symbol ]</h4>
+
+<pre class="ruby"><span class="ruby-identifier">conf</span>[:<span class="ruby-identifier">alpha</span>]      <span class="ruby-comment"># =&gt; 1</span>
+<span class="ruby-identifier">conf</span>[:<span class="ruby-identifier">bravo</span>]      <span class="ruby-comment"># =&gt; 2.0</span>
+<span class="ruby-identifier">conf</span>[:<span class="ruby-identifier">charlie</span>]    <span class="ruby-comment"># =&gt; :three</span>
+<span class="ruby-identifier">conf</span>[:<span class="ruby-identifier">delta</span>]      <span class="ruby-comment"># =&gt; &quot;four&quot;</span>
+</pre>
+
+<p>The underlying storage is an indifferent hash, so the usual Hash and
+Enumerable methods work:</p>
+
+<pre class="ruby"><span class="ruby-identifier">conf</span>.<span class="ruby-identifier">size</span>                           <span class="ruby-comment"># =&gt; 4</span>
+<span class="ruby-identifier">conf</span>.<span class="ruby-identifier">keys</span>                           <span class="ruby-comment"># =&gt; [ 'alpha', 'bravo', 'charlie', 'delta' ]</span>
+<span class="ruby-identifier">conf</span>.<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">key</span>,<span class="ruby-identifier">value</span><span class="ruby-operator">|</span> <span class="ruby-identifier">value</span> }  <span class="ruby-comment"># =&gt; [ 1, 2.0, :three, 'four' ]</span>
+</pre>
+
+<h2 id="label-Features">Features</h2>
 <ul><li>
-<p>Hash operators [] &amp; []=</p>
+<p>settings by named methods</p>
 </li><li>
-<p>Nested configurations</p>
+<p>settings by ‘[]’ &amp; ‘[]=’</p>
 </li><li>
-<p>Nested configurations inherit settings</p>
+<p>settings &amp; locals with ‘=’</p>
 </li><li>
-<p>Nested configurations override inherited settings</p>
+<p>referencing existing settings</p>
 </li><li>
-<p>Load configurations from a string or file at creation</p>
+<p>nested configurations</p>
 </li><li>
-<p>Iterate over items hash - by delegation to hash</p>
+<p>inheritance &amp; override</p>
 </li><li>
-<p>Indifferent hash access - using ActiveSupport/HashWithIndifferentAccess</p>
+<p>read from string, at creation, or after - merged &amp; nested</p>
 </li><li>
-<p>Clean DSL syntax for creating a nested configuration - just a block ?</p>
+<p>load from filename, at creation, or after - merged &amp; nested</p>
 </li><li>
-<p>Load configurations from a string or file after creation / in DSL block</p>
+<p>todo: merge configurations</p>
+</li><li>
+<p>todo: defaults</p>
+</li><li>
+<p>todo: blank slate</p>
 </li></ul>
 
-<p>## Todo</p>
-
-<p>Need time (have motivation)…</p>
+<h2 id="label-Fancy+usage">Fancy usage</h2>
 <ul><li>
-<p>Configuration file load path</p>
+<p>Dynamic settings by ‘[]’ &amp; ‘[]=’ &amp; ‘self’</p>
 </li><li>
-<p>Use an existing configuration for defaults</p>
+<p>Multiple configuration files</p>
 </li><li>
-<p>Blank slate for DSL ? - optional ?</p>
-</li><li>
-<p>Option to get hash directly to prevent polluting namespace with delegated
-hash methods</p>
-</li><li>
-<p>Consider issues around deferred interpolation / procs / lambdas etc…</p>
-</li><li>
-<p>Load other formats into configuration - YAML, CSV, …anything Enumerable
-should be easy enough.</p>
+<p>Hierarchial configuration files</p>
 </li></ul>
 
-<p>## License</p>
+<h2 id="label-License">License</h2>
 
-<p>Licensed under GPL Version 3 license See LICENSE file</p>
+<p>Copyright Gerard Fowley (iqeo at gerard.fowley.net).</p>
+
+<p>Licensed under GPL Version 3 license. See LICENSE file.</p>
 
 </div>
 
