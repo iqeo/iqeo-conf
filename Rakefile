@@ -9,7 +9,7 @@ RDoc::Task.new do |rdoc|
   rdoc.main = "README.rdoc"
   rdoc.rdoc_files.include "README.rdoc", "lib/**/*.rb"
   rdoc.rdoc_files.exclude "lib/**/hash_with_indifferent_access.rb"
-#  rdoc.options <<
+  rdoc.options << "--all" << "--verbose"
 end
 
 task :default => :spec
