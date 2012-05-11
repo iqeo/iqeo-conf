@@ -1,0 +1,206 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>
+  File: README
+  
+    &mdash; Documentation by YARD 0.8.1
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '';
+  framesUrl = "frames.html#!" + escape(window.location.href);
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: README</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><div id='filecontents'><h1>Iqeo::Configuration</h1>
+
+<p>A DSL representing configuration files.</p>
+
+<h2>Installation</h2>
+
+<p>It`s a gem...</p>
+
+<pre class="code ruby"><code>$ gem install iqeo-conf
+</code></pre>
+
+<h2>Usage</h2>
+
+<p>Require &#39;iqeo/configuration&#39; and optionally include Iqeo namespace:</p>
+
+<pre class="code ruby"><code><span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>iqeo/configuration</span><span class='tstring_end'>'</span></span>
+<span class='id identifier rubyid_include'>include</span> <span class='const'>Iqeo</span>
+</code></pre>
+
+<h3>Create configuration</h3>
+
+<p>There are three ways to create configurations; explicit, block DSL, eval DSL.</p>
+
+<h4>Explicit</h4>
+
+<p>Call Configuration#new without a block.
+Explicitly call methods on instance to configure instance.</p>
+
+<pre class="code ruby"><code><span class='id identifier rubyid_conf'>conf</span> <span class='op'>=</span> <span class='const'>Configuration</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
+<span class='id identifier rubyid_conf'>conf</span><span class='period'>.</span><span class='id identifier rubyid_alpha'>alpha</span>   <span class='int'>1</span>
+<span class='id identifier rubyid_conf'>conf</span><span class='period'>.</span><span class='id identifier rubyid_bravo'>bravo</span>   <span class='float'>2.0</span>
+<span class='id identifier rubyid_conf'>conf</span><span class='period'>.</span><span class='id identifier rubyid_charlie'>charlie</span> <span class='symbol'>:three</span>
+<span class='id identifier rubyid_conf'>conf</span><span class='period'>.</span><span class='id identifier rubyid_delta'>delta</span>   <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>four</span><span class='tstring_end'>&quot;</span></span>
+</code></pre>
+
+<h4>Block DSL</h4>
+
+<p>Call Configuration#new with a block that expects a variable, a new instance will be yielded.
+Within block, call methods on yielded instance to configure.</p>
+
+<pre class="code ruby"><code><span class='id identifier rubyid_conf'>conf</span> <span class='op'>=</span> <span class='const'>Configuration</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_c'>c</span><span class='op'>|</span>
+  <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_alpha'>alpha</span>   <span class='int'>1</span>
+  <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_bravo'>bravo</span>   <span class='float'>2.0</span>
+  <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_charlie'>charlie</span> <span class='symbol'>:three</span>
+  <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_delta'>delta</span>   <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>four</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span>
+</code></pre>
+
+<h4>Eval DSL</h4>
+
+<p>Call Configuration#new with a block that does not expect a variable, contents of the block are eval`d in the context of the new instance.
+Call methods with implied self to configure instance.</p>
+
+<pre class="code ruby"><code><span class='id identifier rubyid_conf'>conf</span> <span class='op'>=</span> <span class='const'>Configuration</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='kw'>do</span>
+  <span class='id identifier rubyid_alpha'>alpha</span>   <span class='int'>1</span>
+  <span class='id identifier rubyid_bravo'>bravo</span>   <span class='float'>2.0</span>
+  <span class='id identifier rubyid_charlie'>charlie</span> <span class='symbol'>:three</span>
+  <span class='id identifier rubyid_delta'>delta</span>   <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>four</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span>
+</code></pre>
+
+<h3>Read configuration</h3>
+
+<p>All examples above result in the same configuration.
+Configuration settings can be retrieved directly or indirectly.</p>
+
+<h4>Directly</h4>
+
+<h5>Named method</h5>
+
+<pre class="code ruby"><code><span class='id identifier rubyid_conf'>conf</span><span class='period'>.</span><span class='id identifier rubyid_alpha'>alpha</span>        <span class='comment'># =&gt; 1
+</span><span class='id identifier rubyid_conf'>conf</span><span class='period'>.</span><span class='id identifier rubyid_bravo'>bravo</span>        <span class='comment'># =&gt; 2.0
+</span><span class='id identifier rubyid_conf'>conf</span><span class='period'>.</span><span class='id identifier rubyid_charlie'>charlie</span>      <span class='comment'># =&gt; :three
+</span><span class='id identifier rubyid_conf'>conf</span><span class='period'>.</span><span class='id identifier rubyid_delta'>delta</span>        <span class='comment'># =&gt; &quot;four&quot;
+</span></code></pre>
+
+<h5>[ &#39;string&#39; ]</h5>
+
+<pre class="code ruby"><code><span class='id identifier rubyid_conf'>conf</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>alpha</span><span class='tstring_end'>'</span></span><span class='rbracket'>]</span>     <span class='comment'># =&gt; 1
+</span><span class='id identifier rubyid_conf'>conf</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>bravo</span><span class='tstring_end'>'</span></span><span class='rbracket'>]</span>     <span class='comment'># =&gt; 2.0
+</span><span class='id identifier rubyid_conf'>conf</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>charlie</span><span class='tstring_end'>'</span></span><span class='rbracket'>]</span>   <span class='comment'># =&gt; :three
+</span><span class='id identifier rubyid_conf'>conf</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>delta</span><span class='tstring_end'>'</span></span><span class='rbracket'>]</span>     <span class='comment'># =&gt; &quot;four&quot;
+</span></code></pre>
+
+<h5>[ :symbol ]</h5>
+
+<pre class="code ruby"><code><span class='id identifier rubyid_conf'>conf</span><span class='lbracket'>[</span><span class='symbol'>:alpha</span><span class='rbracket'>]</span>      <span class='comment'># =&gt; 1
+</span><span class='id identifier rubyid_conf'>conf</span><span class='lbracket'>[</span><span class='symbol'>:bravo</span><span class='rbracket'>]</span>      <span class='comment'># =&gt; 2.0
+</span><span class='id identifier rubyid_conf'>conf</span><span class='lbracket'>[</span><span class='symbol'>:charlie</span><span class='rbracket'>]</span>    <span class='comment'># =&gt; :three
+</span><span class='id identifier rubyid_conf'>conf</span><span class='lbracket'>[</span><span class='symbol'>:delta</span><span class='rbracket'>]</span>      <span class='comment'># =&gt; &quot;four&quot;
+</span></code></pre>
+
+<h4>Indirectly</h4>
+
+<p>The underlying storage is an indifferent hash, so the usual Hash and Enumerable methods work.</p>
+
+<h5>Hash &amp; Enumerable methods</h5>
+
+<pre class="code ruby"><code><span class='id identifier rubyid_conf'>conf</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span>                           <span class='comment'># =&gt; 4
+</span><span class='id identifier rubyid_conf'>conf</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span>                           <span class='comment'># =&gt; [ 'alpha', 'bravo', 'charlie', 'delta' ]
+</span><span class='id identifier rubyid_conf'>conf</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span><span class='id identifier rubyid_value'>value</span><span class='op'>|</span> <span class='id identifier rubyid_value'>value</span> <span class='rbrace'>}</span>  <span class='comment'># =&gt; [ 1, 2.0, :three, 'four' ]
+</span></code></pre>
+
+<h2>Features</h2>
+
+<ul>
+<li>settings by named methods</li>
+<li>settings by &#39;[]&#39; &amp; &#39;[]=&#39;</li>
+<li>settings &amp; locals with &#39;=&#39;</li>
+<li>referencing existing settings</li>
+<li>nested configurations</li>
+<li>inheritance &amp; override</li>
+<li>read from string, at creation, or after - merged &amp; nested</li>
+<li>load from filename, at creation, or after - merged &amp; nested</li>
+<li>todo: merge configurations</li>
+<li>todo: defaults</li>
+<li>todo: blank slate</li>
+</ul>
+
+<h2>Fancy usage</h2>
+
+<ul>
+<li>Dynamic settings by &#39;[]&#39; &amp; &#39;[]=&#39; &amp; &#39;self&#39;</li>
+<li>Multiple configuration files</li>
+<li>Hierarchial configuration files</li>
+</ul>
+
+<h2>License</h2>
+
+<p>Copyright Gerard Fowley (<a href="mailto:gerard.fowley@iqeo.net">gerard.fowley@iqeo.net</a>).</p>
+
+<p>Licensed under GPL Version 3 license.
+See LICENSE file.</p>
+</div></div>
+
+    <div id="footer">
+  Generated on Fri May 11 14:47:00 2012 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.1 (ruby-1.9.3).
+</div>
+
+  </body>
+</html>

@@ -5,7 +5,7 @@ require_relative "configuration/hash_with_indifferent_access"
 # todo: merge configurations
 # todo: defaults
 # todo: blank slate for DSL
-# todo: rdoc documentation
+# todo: rdoc documentation - yuck! try YARD & Markdown!
 
 # Iqeo namespace module.
 
@@ -23,7 +23,9 @@ module Iqeo
       VERSION
     end
 
-    # Creates a new Configuration instance from string. Content should be in Eval DSL format.
+    # Creates a new Configuration instance from string.
+    #
+    # Content should be in Eval DSL format.
 
     def self.read string
       conf = self.new
@@ -31,7 +33,9 @@ module Iqeo
       conf
     end
 
-    # Creates a new Configuration instance from filename or File/IO object. Content should be in Eval DSL format.
+    # Creates a new Configuration instance from filename or File/IO object.
+    #
+    # Content should be in Eval DSL format.
 
     def self.load file
       return self.read file.respond_to?(:read) ? file.read : File.read(file)
@@ -93,8 +97,10 @@ module Iqeo
     end
     alias []= _set
 
-    # Retrieves value for key. Indifferent storage permits key to be a string or symbol.
+    # Retrieves value for key, indifferent storage permits key to be a string or symbol.
+    #
     # If configuration is nested, searches for key recursively up to root.
+    #
     # Returns nil if key does not exist.
 
     def _get key
