@@ -10,6 +10,39 @@ describe Configuration do
     Configuration.version.should == Configuration::VERSION
   end
 
+  def simple_eval_string
+    "alpha 1
+    bravo 'two'
+    charlie 3.0
+    delta :four"
+  end
+
+  def simple_explicit_configuration
+    conf = Configuration.new
+    conf.alpha 1
+    conf.bravo 'two'
+    conf.charlie 3.0
+    conf.delta :four
+    conf
+  end
+
+  def simple_configuration_example conf
+    conf.should_not be_nil
+    conf.alpha.should   == 1     and conf.alpha.should be_a Fixnum
+    conf.bravo.should   == "two" and conf.bravo.should be_a String
+    conf.charlie.should == 3.0   and conf.charlie.should be_a Float
+    conf.delta.should   == :four and conf.delta.should be_a Symbol
+  end
+
+  def nested_configuration_example conf
+    conf.alpha.should be_true
+    conf.foxtrot.should be_true
+    simple_configuration_example conf.bravo
+    conf.bravo.foxtrot.should be_true
+    simple_configuration_example conf.echo
+    conf.echo.foxtrot.should be_true
+  end
+
   context 'at creation' do
 
     it 'does not require a block' do
@@ -38,73 +71,27 @@ describe Configuration do
 
     context 'can load' do
 
-      it 'simple instance_eval DSL from string' do
-        string = "alpha 1
-                  bravo 'two'
-                  charlie 3.0
-                  delta :four"
-        conf = nil
-        expect do
-          conf = Configuration.read string
-        end.to_not raise_error
-        conf.should_not be_nil
-        conf.alpha.should   == 1     and conf.alpha.should be_a Fixnum
-        conf.bravo.should   == "two" and conf.bravo.should be_a String
-        conf.charlie.should == 3.0   and conf.charlie.should be_a Float
-        conf.delta.should   == :four and conf.delta.should be_a Symbol
+      it 'simple eval DSL from string' do
+        simple_configuration_example Configuration.read simple_eval_string
       end
 
-      it 'simple instance_eval DSL from file (StringIO)' do
-        io = StringIO.new  "alpha 1
-                            bravo 'two'
-                            charlie 3.0
-                            delta :four"
-        conf = nil
-        expect do
-          conf = Configuration.load io
-        end.to_not raise_error
-        conf.should_not be_nil
-        conf.alpha.should   == 1     and conf.alpha.should be_a Fixnum
-        conf.bravo.should   == "two" and conf.bravo.should be_a String
-        conf.charlie.should == 3.0   and conf.charlie.should be_a Float
-        conf.delta.should   == :four and conf.delta.should be_a Symbol
+      it 'simple eval DSL from file (StringIO)' do
+        simple_configuration_example Configuration.load StringIO.new simple_eval_string
       end
 
-      it 'simple instance_eval DSL from file (mock & expected methods)' do
+      it 'simple eval DSL from file (mock & expected methods)' do
         file = mock
         file.should_receive( :respond_to? ).with( :read ).and_return true
-        file.should_receive( :read ).and_return  "alpha 1
-                                                  bravo 'two'
-                                                  charlie 3.0
-                                                  delta :four"
-        conf = nil
-        expect do
-          conf = Configuration.load file
-        end.to_not raise_error
-        conf.should_not be_nil
-        conf.alpha.should   == 1     and conf.alpha.should be_a Fixnum
-        conf.bravo.should   == "two" and conf.bravo.should be_a String
-        conf.charlie.should == 3.0   and conf.charlie.should be_a Float
-        conf.delta.should   == :four and conf.delta.should be_a Symbol
+        file.should_receive( :read ).and_return simple_eval_string
+        simple_configuration_example Configuration.load file
       end
 
-      it 'simple instance_eval DSL from filename (expected methods)' do
-        File.should_receive( :read ).with( "filename" ).and_return "alpha 1
-                                                                    bravo 'two'
-                                                                    charlie 3.0
-                                                                    delta :four"
-        conf = nil
-        expect do
-          conf = Configuration.load "filename"
-        end.to_not raise_error
-        conf.should_not be_nil
-        conf.alpha.should   == 1     and conf.alpha.should be_a Fixnum
-        conf.bravo.should   == "two" and conf.bravo.should be_a String
-        conf.charlie.should == 3.0   and conf.charlie.should be_a Float
-        conf.delta.should   == :four and conf.delta.should be_a Symbol
+      it 'simple eval DSL from filename (expected methods)' do
+        File.should_receive( :read ).with( "filename" ).and_return simple_eval_string
+        simple_configuration_example Configuration.load "filename"
       end
 
-      it 'complex instance_eval DSL from string' do
+      it 'complex eval DSL from string' do
         string = "alpha true
                   bravo do
                     charlie true
@@ -112,10 +99,7 @@ describe Configuration do
                       echo true
                     end
                   end"
-        conf = nil
-        expect do
-          conf = Configuration.read string
-        end.to_not raise_error
+        conf = Configuration.read string
         conf.should_not be_nil
         conf.alpha.should be_true
         conf.bravo.should be_a Configuration
@@ -134,19 +118,15 @@ describe Configuration do
   context 'settings retrieval' do
 
     it 'returns nil for non-existent settings' do
-      conf = Configuration.new
-      conf.not_a_setting.should be_nil
+      simple_explicit_configuration.not_a_setting.should be_nil
     end
 
     it 'delegates hash methods to internal hash' do
-      conf = nil
-      expect do
         conf = Configuration.new
         conf.alpha 1
         conf.bravo 2
         conf.charlie 3
         conf.delta 4
-      end.to_not raise_error
       conf.should_not be_nil
       sum = 0
       expect do
@@ -161,19 +141,7 @@ describe Configuration do
   context 'single value setting' do
 
     it 'accepts simple values' do
-      conf = nil
-      expect do
-        conf = Configuration.new
-        conf.alpha 1
-        conf.bravo 'two'
-        conf.charlie 3.0
-        conf.delta :four
-      end.to_not raise_error
-      conf.should_not be_nil
-      conf.alpha.should   == 1     and conf.alpha.should be_a Fixnum
-      conf.bravo.should   == 'two' and conf.bravo.should be_a String
-      conf.charlie.should == 3.0   and conf.charlie.should be_a Float
-      conf.delta.should == :four   and conf.delta.should be_a Symbol
+      simple_configuration_example simple_explicit_configuration
     end
 
     it 'accepts complex values' do
@@ -521,83 +489,47 @@ describe Configuration do
       context 'can load' do
 
         it 'settings into the current configuration from a string' do
-          conf = nil
-          expect do
-            conf = Configuration.new do |c|
-              c.alpha true
-              c._read "bravo true\ncharlie true"
-            end
-          end.to_not raise_error
-          conf.should_not be_nil
-          conf.alpha.should be_true
-          conf.bravo.should be_true
-          conf.charlie.should be_true
+          conf = Configuration.new do |c|
+            c.alpha false
+            c._read simple_eval_string
+            c.echo true
+          end
+          simple_configuration_example conf
+          conf.echo.should be_true
         end
 
         it 'settings into the current configuration from a file (StringIO)' do
-          io = StringIO.new "bravo true
-                             charlie true"
-          conf = nil
-          expect do
-            conf = Configuration.new do |c|
-              c.alpha true
-              c._load io
-            end
-          end.to_not raise_error
-          conf.should_not be_nil
-          conf.alpha.should be_true
-          conf.bravo.should be_true
-          conf.charlie.should be_true
+          conf = Configuration.new do |c|
+            c.alpha false
+            c._load StringIO.new simple_eval_string
+            c.echo true
+          end
+          simple_configuration_example conf
+          conf.echo.should be_true
         end
 
         it 'settings into a nested configuration from a string' do
-          conf = nil
-          expect do
-            conf = Configuration.new do |c|
-              c.alpha true
-              c.bravo do |x|
-                x._read "charlie true\ndelta true"
-              end
-              c.echo { |x| x._read "foxtrot true\nhotel true" }
+          conf = Configuration.new do |c|
+            c.alpha true
+            c.bravo do |x|
+              x._read simple_eval_string
             end
-          end.to_not raise_error
-          conf.should_not be_nil
-          conf.alpha.should be_true
-          conf.bravo.should be_a Configuration
-          conf.bravo.charlie.should be_true
-          conf.bravo.delta.should be_true
-          conf.bravo.alpha.should be_true
-          conf.echo.should be_a Configuration
-          conf.echo.foxtrot.should be_true
-          conf.echo.hotel.should be_true
-          conf.echo.alpha.should be_true
+            c.echo { |x| x._read simple_eval_string }
+            c.foxtrot true
+          end
+          nested_configuration_example conf
         end
 
         it 'settings into a nested configuration from a file (StringIO)' do
-          io1 = StringIO.new "charlie true
-                              delta true"
-          io2 = StringIO.new "foxtrot true
-                              hotel true"
-          conf = nil
-          expect do
-            conf = Configuration.new do |c|
-              c.alpha true
-              c.bravo do |x|
-                x._load io1
-              end
-              c.echo { |x| x._load io2 }
+          conf = Configuration.new do |c|
+            c.alpha true
+            c.bravo do |x|
+              x._load StringIO.new simple_eval_string
             end
-          end.to_not raise_error
-          conf.should_not be_nil
-          conf.alpha.should be_true
-          conf.bravo.should be_a Configuration
-          conf.bravo.charlie.should be_true
-          conf.bravo.delta.should be_true
-          conf.bravo.alpha.should be_true
-          conf.echo.should be_a Configuration
-          conf.echo.foxtrot.should be_true
-          conf.echo.hotel.should be_true
-          conf.echo.alpha.should be_true
+            c.echo { |x| x._load StringIO.new simple_eval_string }
+            c.foxtrot true
+          end
+          nested_configuration_example conf
         end
 
       end # can load
@@ -794,83 +726,46 @@ describe Configuration do
       context 'can load' do
 
         it 'settings into the current configuration from a string' do
-          conf = nil
-          expect do
-            conf = Configuration.new do
-              alpha true
-              _read "bravo true\ncharlie true"
-            end
-          end.to_not raise_error
-          conf.should_not be_nil
-          conf.alpha.should be_true
-          conf.bravo.should be_true
-          conf.charlie.should be_true
+          $simple_eval_string = simple_eval_string
+          conf = Configuration.new do
+            alpha true
+            _read $simple_eval_string
+          end
+          simple_configuration_example conf
         end
 
         it 'settings into the current configuration from a file (StringIO)' do
-          io = StringIO.new "bravo true
-                             charlie true"
-          conf = nil
-          expect do
-            conf = Configuration.new do
-              alpha true
-              _load io
-            end
-          end.to_not raise_error
-          conf.should_not be_nil
-          conf.alpha.should be_true
-          conf.bravo.should be_true
-          conf.charlie.should be_true
+          $simple_eval_string = simple_eval_string
+          conf = Configuration.new do
+            alpha true
+            _load StringIO.new $simple_eval_string
+          end
+          simple_configuration_example conf
         end
 
         it 'settings into a nested configuration from a string' do
-          conf = nil
-          expect do
-            conf = Configuration.new do
-              alpha true
-              bravo do
-                _read "charlie true\ndelta true"
-              end
-              echo { _read "foxtrot true\nhotel true" }
+          $simple_eval_string = simple_eval_string
+          conf = Configuration.new do
+            alpha true
+            bravo do
+              _read $simple_eval_string
             end
-          end.to_not raise_error
-          conf.should_not be_nil
-          conf.alpha.should be_true
-          conf.bravo.should be_a Configuration
-          conf.bravo.charlie.should be_true
-          conf.bravo.delta.should be_true
-          conf.bravo.alpha.should be_true
-          conf.echo.should be_a Configuration
-          conf.echo.foxtrot.should be_true
-          conf.echo.hotel.should be_true
-          conf.echo.alpha.should be_true
+            echo { _read $simple_eval_string }
+            foxtrot true
+          end
+          nested_configuration_example conf
         end
 
         it 'settings into a nested configuration from a file (StringIO)' do
-          io1 = StringIO.new "charlie true
-                              delta true"
-          io2 = StringIO.new "foxtrot true
-                              hotel true"
-          conf = nil
-          expect do
-            conf = Configuration.new do
-              alpha true
-              bravo do
-                _load io1
-              end
-              echo { _load io2 }
+          conf = Configuration.new do
+            alpha true
+            bravo do
+              _load StringIO.new $simple_eval_string
             end
-          end.to_not raise_error
-          conf.should_not be_nil
-          conf.alpha.should be_true
-          conf.bravo.should be_a Configuration
-          conf.bravo.charlie.should be_true
-          conf.bravo.delta.should be_true
-          conf.bravo.alpha.should be_true
-          conf.echo.should be_a Configuration
-          conf.echo.foxtrot.should be_true
-          conf.echo.hotel.should be_true
-          conf.echo.alpha.should be_true
+            echo { _load StringIO.new $simple_eval_string }
+            foxtrot true
+          end
+          nested_configuration_example conf
         end
 
       end # can load

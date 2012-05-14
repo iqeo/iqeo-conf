@@ -15,7 +15,7 @@ Gem::Specification.new do |gem|
   gem.version       = Iqeo::Configuration::VERSION
 
   gem.add_development_dependency "rake",      "~> 0.9.2"
-  gem.add_development_dependency "rspec",     "~> 2.9.0"
+  gem.add_development_dependency "rspec",     "~> 2.10.0"
   gem.add_development_dependency "yard",      "~> 0.8.1"
   gem.add_development_dependency "rdoc",      "~> 3.12.0"
   gem.add_development_dependency "redcarpet", "~> 2.1.1"
