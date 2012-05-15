@@ -2,12 +2,9 @@
 require_relative "configuration/version"
 require_relative "configuration/hash_with_indifferent_access"
 
-# todo: merge configurations
-# todo: defaults
 # todo: blank slate for DSL
-# todo: rdoc documentation - yuck! try YARD & Markdown!
 
-# Iqeo namespace module.
+# Iqeo namespace
 
 module Iqeo
 
@@ -52,8 +49,12 @@ module Iqeo
       conf
     end
 
-    def initialize &block
-      @items = HashWithIndifferentAccess.new
+    def initialize default = nil, &block
+      @_items = case
+                  when default.kind_of?( HashWithIndifferentAccess ) then default
+                  when default.kind_of?( Configuration ) then default._items
+                  else HashWithIndifferentAccess.new
+                end
       @_parent = nil
       if block_given?
         if block.arity == 1                                           # cannot set parent for yield blocks here as self is wrong !?
@@ -68,7 +69,7 @@ module Iqeo
     end
 
     def method_missing name, *values, &block
-      return @items.send( name, *values, &block ) if @items.respond_to? name     # @items methods are highest priority
+      return @_items.send( name, *values, &block ) if @_items.respond_to? name     # @_items methods are highest priority
 
       name = name.to_s.chomp('=')
 
@@ -85,7 +86,7 @@ module Iqeo
       return _set name, values.first                                  # set item to single value
     end
 
-    attr_accessor :_parent
+    attr_accessor :_parent, :_items
 
     def _set key, value
       # fix: extend parenting for enumerable with configurations at arbitrary depth
@@ -93,7 +94,7 @@ module Iqeo
       when value.kind_of?( Configuration ) then value._parent = self
       when value.kind_of?( Enumerable )    then value.each { |v| v._parent = self if v.kind_of? Configuration }
       end
-      @items[key] = value
+      @_items[key] = value
     end
     alias []= _set
 
@@ -104,8 +105,8 @@ module Iqeo
     # Returns nil if key does not exist.
 
     def _get key
-      return @items[key] unless @items[key].nil?
-      return @items[key] if  _parent.nil?
+      return @_items[key] unless @_items[key].nil?
+      return @_items[key] if _parent.nil?
       _parent._get key
     end
     alias [] _get
@@ -117,6 +118,16 @@ module Iqeo
     def _load file
       _read file.respond_to?(:read) ? file.read : File.read(file)
     end
+
+    def _merge! other
+      @_items.merge! other._items
+      self
+    end
+
+    def _merge other
+      self.dup._merge! other
+    end
+
 
   end
 

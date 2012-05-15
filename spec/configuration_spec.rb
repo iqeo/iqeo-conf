@@ -6,10 +6,6 @@ include Iqeo
 
 describe Configuration do
 
-  it 'reports the correct version' do
-    Configuration.version.should == Configuration::VERSION
-  end
-
   def simple_eval_string
     "alpha 1
     bravo 'two'
@@ -43,6 +39,10 @@ describe Configuration do
     conf.echo.foxtrot.should be_true
   end
 
+  it 'reports the correct version' do
+    Configuration.version.should == Configuration::VERSION
+  end
+
   context 'at creation' do
 
     it 'does not require a block' do
@@ -67,6 +67,19 @@ describe Configuration do
       conf_yielded = nil
       conf_new = Configuration.new { |conf| conf_yielded = conf }
       conf_new.should be conf_yielded
+    end
+
+    it 'accepts defaults from another configuration' do
+      conf = Configuration.new simple_explicit_configuration
+      simple_configuration_example conf
+    end
+
+    it 'overrides defaults from another configuration' do
+      conf_default = Configuration.new( simple_explicit_configuration ) { echo true }
+      conf_default.echo.should be_true
+      conf = Configuration.new( conf_default ) { echo false }
+      simple_configuration_example conf
+      conf.echo.should be_false
     end
 
     context 'can load' do
@@ -774,4 +787,37 @@ describe Configuration do
 
   end # mode of usage
 
+  it 'can merge! configurations' do
+    orig = simple_explicit_configuration
+    orig.echo :original1
+    orig.foxtrot :original2
+    other = Configuration.new do
+              foxtrot :overridden
+              hotel :new
+            end
+    conf = orig._merge! other
+    simple_configuration_example conf
+    conf.echo.should be :original1
+    conf.hotel.should be :new
+    conf.foxtrot.should be :overridden
+    conf.should be orig
+  end
+
+  it 'can merge configurations' do
+    orig = simple_explicit_configuration
+    orig.echo :original1
+    orig.foxtrot :original2
+    other = Configuration.new do
+              foxtrot :overridden
+              hotel :new
+            end
+    conf = orig._merge other
+    simple_configuration_example conf
+    conf.echo.should be :original1
+    conf.hotel.should be :new
+    conf.foxtrot.should be :overridden
+    conf.should_not be orig
+  end
+
 end
+

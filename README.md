@@ -118,8 +118,8 @@ conf.collect { |key,value| value }  # => [ 1, 2.0, :three, 'four' ]
 * inheritance & override
 * read from string, at creation, or after - merged & nested
 * load from filename, at creation, or after - merged & nested
-* todo: merge configurations
-* todo: defaults
+* defaults
+* merge configurations
 * todo: blank slate
 
 ## Fancy usage
