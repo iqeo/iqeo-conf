@@ -49,6 +49,10 @@ module Iqeo
       conf
     end
 
+    attr_accessor :_parent, :_items
+
+    # todo: defaults immediate children Configurations should have _parent updated
+
     def initialize default = nil, &block
       @_items = case
                   when default.kind_of?( HashWithIndifferentAccess ) then default
@@ -86,10 +90,8 @@ module Iqeo
       return _set name, values.first                                  # set item to single value
     end
 
-    attr_accessor :_parent, :_items
-
     def _set key, value
-      # fix: extend parenting for enumerable with configurations at arbitrary depth
+      # todo: extend parenting for enumerable with configurations at arbitrary depth
       case
       when value.kind_of?( Configuration ) then value._parent = self
       when value.kind_of?( Enumerable )    then value.each { |v| v._parent = self if v.kind_of? Configuration }
@@ -119,6 +121,8 @@ module Iqeo
       _read file.respond_to?(:read) ? file.read : File.read(file)
     end
 
+    # todo: merges should update _parent of any immediate child Configurations
+
     def _merge! other
       @_items.merge! other._items
       self
@@ -128,8 +132,12 @@ module Iqeo
       self.dup._merge! other
     end
 
+    # todo: can :_parent= be protected ?
+
+    protected :_parent, :_items, :_items=, :_get, :[], :_set, :[]=
 
   end
 
 end
+
 

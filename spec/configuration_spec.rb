@@ -249,8 +249,8 @@ describe Configuration do
         conf.alpha.bravo.charlie true
       end.to_not raise_error
       conf.should_not be_nil
-      conf.alpha.bravo._parent.should be conf.alpha
-      conf.alpha._parent.should be conf
+      conf.alpha.bravo.send(:_parent).should be conf.alpha
+      conf.alpha.send(:_parent).should be conf
       conf._parent.should be_nil
     end
 
@@ -261,7 +261,7 @@ describe Configuration do
         conf.alpha Configuration.new, Configuration.new, Configuration.new
       end.to_not raise_error
       conf.should_not be_nil
-      conf.alpha.each { |child| child._parent.should be conf }
+      conf.alpha.each { |child| child.send(:_parent).should be conf }
       conf._parent.should be_nil
     end
 
@@ -787,36 +787,40 @@ describe Configuration do
 
   end # mode of usage
 
-  it 'can merge! configurations' do
-    orig = simple_explicit_configuration
-    orig.echo :original1
-    orig.foxtrot :original2
-    other = Configuration.new do
-              foxtrot :overridden
-              hotel :new
-            end
-    conf = orig._merge! other
-    simple_configuration_example conf
-    conf.echo.should be :original1
-    conf.hotel.should be :new
-    conf.foxtrot.should be :overridden
-    conf.should be orig
-  end
+  context 'merge' do
 
-  it 'can merge configurations' do
-    orig = simple_explicit_configuration
-    orig.echo :original1
-    orig.foxtrot :original2
-    other = Configuration.new do
-              foxtrot :overridden
-              hotel :new
-            end
-    conf = orig._merge other
-    simple_configuration_example conf
-    conf.echo.should be :original1
-    conf.hotel.should be :new
-    conf.foxtrot.should be :overridden
-    conf.should_not be orig
+    it 'can update its own configuration' do
+      orig = simple_explicit_configuration
+      orig.echo :original1
+      orig.foxtrot :original2
+      other = Configuration.new do
+                foxtrot :overridden
+                hotel :new
+              end
+      conf = orig._merge! other
+      simple_configuration_example conf
+      conf.echo.should be :original1
+      conf.hotel.should be :new
+      conf.foxtrot.should be :overridden
+      conf.should be orig
+    end
+
+    it 'can create a new configuration' do
+      orig = simple_explicit_configuration
+      orig.echo :original1
+      orig.foxtrot :original2
+      other = Configuration.new do
+                foxtrot :overridden
+                hotel :new
+              end
+      conf = orig._merge other
+      simple_configuration_example conf
+      conf.echo.should be :original1
+      conf.hotel.should be :new
+      conf.foxtrot.should be :overridden
+      conf.should_not be orig
+    end
+
   end
 
 end
