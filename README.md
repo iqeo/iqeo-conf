@@ -120,7 +120,7 @@ conf.collect { |key,value| value }  # => [ 1, 2.0, :three, 'four' ]
 * load from filename, at creation, or after - merged & nested
 * defaults
 * merge configurations
-* todo: blank slate
+* blank slate for DSL
 
 ## Fancy usage
 

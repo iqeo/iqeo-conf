@@ -40,7 +40,7 @@ describe Configuration do
   end
 
   it 'reports the correct version' do
-    Configuration.version.should == Configuration::VERSION
+    Configuration.version.should == CONFIGURATION_VERSION
   end
 
   context 'at creation' do
@@ -68,6 +68,17 @@ describe Configuration do
       conf_new = Configuration.new { |conf| conf_yielded = conf }
       conf_new.should be conf_yielded
     end
+
+    it 'accept a block with arity > 1' do
+      Configuration.new { |arg1,arg2,arg3| }.should be_a Configuration
+    end
+
+    it 'yield self to block with arity > 1' do
+      conf_yielded = nil
+      conf_new = Configuration.new { |conf,arg1,arg2| conf_yielded = conf }
+      conf_new.should be conf_yielded
+    end
+
 
     it 'accepts defaults from another configuration' do
       conf = Configuration.new simple_explicit_configuration
@@ -249,8 +260,8 @@ describe Configuration do
         conf.alpha.bravo.charlie true
       end.to_not raise_error
       conf.should_not be_nil
-      conf.alpha.bravo.send(:_parent).should be conf.alpha
-      conf.alpha.send(:_parent).should be conf
+      conf.alpha.bravo.__send__(:_parent).should be conf.alpha
+      conf.alpha.__send__(:_parent).should be conf
       conf._parent.should be_nil
     end
 
@@ -261,7 +272,7 @@ describe Configuration do
         conf.alpha Configuration.new, Configuration.new, Configuration.new
       end.to_not raise_error
       conf.should_not be_nil
-      conf.alpha.each { |child| child.send(:_parent).should be conf }
+      conf.alpha.each { |child| child.__send__(:_parent).should be conf }
       conf._parent.should be_nil
     end
 

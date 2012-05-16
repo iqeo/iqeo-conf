@@ -2,27 +2,62 @@
 require_relative "configuration/version"
 require_relative "configuration/hash_with_indifferent_access"
 
-# todo: blank slate for DSL
-
 # Iqeo namespace
 
 module Iqeo
+
+  class BlankSlate
+
+=begin
+  instance methods to keep:
+    __id__
+    __send__
+    object_id
+  needed for operation:
+    dup
+    instance_eval
+  needed to pass rspec tests:
+    equal?
+    is_a?
+    kind_of?
+=end
+
+    instance_methods_to_undef = %w(
+      !                     !=                      !~                         <=>
+      ==                    ===                     =~                         class
+      clone                 define_singleton_method display                    enum_for
+      eql?                  extend                  freeze                     frozen?
+      hash                  initialize_clone        initialize_dup             inspect
+      instance_exec         instance_of?            instance_variable_defined? instance_variable_get
+      instance_variable_set instance_variables      method                     methods
+      nil?                  private_methods         protected_methods          public_method
+      public_methods        public_send             respond_to?                respond_to_missing?
+      send                  singleton_class         singleton_methods          taint
+      tainted?              tap                     to_enum                    to_s
+      trust                 untaint                 untrust                    untrusted?
+    )
+
+    instance_methods_to_undef.each do |meth|
+      undef_method meth
+    end
+
+  end
 
   # Configuration class.
   #
   # A DSL representing configuration files.
 
-  class Configuration
+  class Configuration < BlankSlate
 
     # Returns Configuration version number.
 
     def self.version
-      VERSION
+      Iqeo::CONFIGURATION_VERSION
     end
 
     # Creates a new Configuration instance from string.
     #
-    # Content should be in Eval DSL format.
+    # Content should be in eval DSL format.
 
     def self.read string
       conf = self.new
@@ -32,7 +67,7 @@ module Iqeo
 
     # Creates a new Configuration instance from filename or File/IO object.
     #
-    # Content should be in Eval DSL format.
+    # Content should be in eval DSL format.
 
     def self.load file
       return self.read file.respond_to?(:read) ? file.read : File.read(file)
@@ -41,19 +76,16 @@ module Iqeo
     def self.new_defer_block_for_parent parent, &block
       conf = Configuration.new
       conf._parent = parent
-      if block_given? && block.arity == 1
+      if block_given? && block.arity > 0
         block.call(conf)                                              # this is 'yield self' from the outside
-      else
-        raise "WTF! expected a block with a single parameter"
       end
       conf
     end
 
     attr_accessor :_parent, :_items
 
-    # todo: defaults immediate children Configurations should have _parent updated
-
     def initialize default = nil, &block
+      # todo: default immediate child Configurations should have _parent updated
       @_items = case
                   when default.kind_of?( HashWithIndifferentAccess ) then default
                   when default.kind_of?( Configuration ) then default._items
@@ -61,7 +93,7 @@ module Iqeo
                 end
       @_parent = nil
       if block_given?
-        if block.arity == 1                                           # cannot set parent for yield blocks here as self is wrong !?
+        if block.arity > 0                                           # cannot set parent for yield blocks here as self is wrong !?
           yield self
         else
           if block.binding.eval('self').kind_of?( Configuration )     # for eval block if nested configuration
@@ -121,14 +153,14 @@ module Iqeo
       _read file.respond_to?(:read) ? file.read : File.read(file)
     end
 
-    # todo: merges should update _parent of any immediate child Configurations
-
     def _merge! other
+      # todo: merges should update _parent of any immediate child Configurations
       @_items.merge! other._items
       self
     end
 
     def _merge other
+      # todo: merges should update _parent of any immediate child Configurations
       self.dup._merge! other
     end
 
