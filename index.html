@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Iqeo-conf : A DSL for writing configuration files..." />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Iqeo-conf</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/iqeo/iqeo-conf">View on GitHub</a>
+
+          <h1 id="project_title">Iqeo-conf</h1>
+          <h2 id="project_tagline">A DSL for writing configuration files...</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/iqeo/iqeo-conf/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/iqeo/iqeo-conf/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>Iqeo::Configuration</h1>
+
+<p>A DSL representing configuration files.</p>
+
+<h2>Installation</h2>
+
+<p>It`s a gem...</p>
+
+<pre><code>$ gem install iqeo-conf
+</code></pre>
+
+<h2>Usage</h2>
+
+<p>Require 'iqeo/configuration' and optionally include Iqeo namespace:</p>
+
+<div class="highlight">
+<pre><span class="nb">require</span> <span class="s1">'iqeo/configuration'</span>
+<span class="kp">include</span> <span class="no">Iqeo</span>
+</pre>
+</div>
+
+
+<h3>Create configuration</h3>
+
+<p>There are three ways to create configurations; explicit, block DSL, eval DSL.</p>
+
+<h4>Explicit</h4>
+
+<p>Call Configuration#new without a block.
+Explicitly call methods on instance to configure instance.</p>
+
+<div class="highlight">
+<pre><span class="n">conf</span> <span class="o">=</span> <span class="no">Configuration</span><span class="o">.</span><span class="n">new</span>
+<span class="n">conf</span><span class="o">.</span><span class="n">alpha</span>   <span class="mi">1</span>
+<span class="n">conf</span><span class="o">.</span><span class="n">bravo</span>   <span class="mi">2</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">conf</span><span class="o">.</span><span class="n">charlie</span> <span class="ss">:three</span>
+<span class="n">conf</span><span class="o">.</span><span class="n">delta</span>   <span class="s2">"four"</span>
+</pre>
+</div>
+
+
+<h4>Block DSL</h4>
+
+<p>Call Configuration#new with a block that expects a variable, a new instance will be yielded.
+Within block, call methods on yielded instance to configure.</p>
+
+<div class="highlight">
+<pre><span class="n">conf</span> <span class="o">=</span> <span class="no">Configuration</span><span class="o">.</span><span class="n">new</span> <span class="k">do</span> <span class="o">|</span><span class="n">c</span><span class="o">|</span>
+  <span class="n">c</span><span class="o">.</span><span class="n">alpha</span>   <span class="mi">1</span>
+  <span class="n">c</span><span class="o">.</span><span class="n">bravo</span>   <span class="mi">2</span><span class="o">.</span><span class="mi">0</span>
+  <span class="n">c</span><span class="o">.</span><span class="n">charlie</span> <span class="ss">:three</span>
+  <span class="n">c</span><span class="o">.</span><span class="n">delta</span>   <span class="s2">"four"</span>
+<span class="k">end</span>
+</pre>
+</div>
+
+
+<h4>Eval DSL</h4>
+
+<p>Call Configuration#new with a block that does not expect a variable, contents of the block are eval`d in the context of the new instance.
+Call methods with implied self to configure instance.</p>
+
+<div class="highlight">
+<pre><span class="n">conf</span> <span class="o">=</span> <span class="no">Configuration</span><span class="o">.</span><span class="n">new</span> <span class="k">do</span>
+  <span class="n">alpha</span>   <span class="mi">1</span>
+  <span class="n">bravo</span>   <span class="mi">2</span><span class="o">.</span><span class="mi">0</span>
+  <span class="n">charlie</span> <span class="ss">:three</span>
+  <span class="n">delta</span>   <span class="s2">"four"</span>
+<span class="k">end</span>
+</pre>
+</div>
+
+
+<h3>Read configuration</h3>
+
+<p>All examples above result in the same configuration.
+Configuration settings can be retrieved directly or indirectly.</p>
+
+<h4>Directly</h4>
+
+<h5>Named method</h5>
+
+<div class="highlight">
+<pre><span class="n">conf</span><span class="o">.</span><span class="n">alpha</span>        <span class="c1"># =&gt; 1</span>
+<span class="n">conf</span><span class="o">.</span><span class="n">bravo</span>        <span class="c1"># =&gt; 2.0</span>
+<span class="n">conf</span><span class="o">.</span><span class="n">charlie</span>      <span class="c1"># =&gt; :three</span>
+<span class="n">conf</span><span class="o">.</span><span class="n">delta</span>        <span class="c1"># =&gt; "four"</span>
+</pre>
+</div>
+
+
+<h5>[ 'string' ]</h5>
+
+<div class="highlight">
+<pre><span class="n">conf</span><span class="o">[</span><span class="s1">'alpha'</span><span class="o">]</span>     <span class="c1"># =&gt; 1</span>
+<span class="n">conf</span><span class="o">[</span><span class="s1">'bravo'</span><span class="o">]</span>     <span class="c1"># =&gt; 2.0</span>
+<span class="n">conf</span><span class="o">[</span><span class="s1">'charlie'</span><span class="o">]</span>   <span class="c1"># =&gt; :three</span>
+<span class="n">conf</span><span class="o">[</span><span class="s1">'delta'</span><span class="o">]</span>     <span class="c1"># =&gt; "four"</span>
+</pre>
+</div>
+
+
+<h5>[ :symbol ]</h5>
+
+<div class="highlight">
+<pre><span class="n">conf</span><span class="o">[</span><span class="ss">:alpha</span><span class="o">]</span>      <span class="c1"># =&gt; 1</span>
+<span class="n">conf</span><span class="o">[</span><span class="ss">:bravo</span><span class="o">]</span>      <span class="c1"># =&gt; 2.0</span>
+<span class="n">conf</span><span class="o">[</span><span class="ss">:charlie</span><span class="o">]</span>    <span class="c1"># =&gt; :three</span>
+<span class="n">conf</span><span class="o">[</span><span class="ss">:delta</span><span class="o">]</span>      <span class="c1"># =&gt; "four"</span>
+</pre>
+</div>
+
+
+<h4>Indirectly</h4>
+
+<p>The underlying storage is an indifferent hash, so the usual Hash and Enumerable methods work.</p>
+
+<h5>Hash &amp; Enumerable methods</h5>
+
+<div class="highlight">
+<pre><span class="n">conf</span><span class="o">.</span><span class="n">size</span>                           <span class="c1"># =&gt; 4</span>
+<span class="n">conf</span><span class="o">.</span><span class="n">keys</span>                           <span class="c1"># =&gt; [ 'alpha', 'bravo', 'charlie', 'delta' ]</span>
+<span class="n">conf</span><span class="o">.</span><span class="n">collect</span> <span class="p">{</span> <span class="o">|</span><span class="n">key</span><span class="p">,</span><span class="n">value</span><span class="o">|</span> <span class="n">value</span> <span class="p">}</span>  <span class="c1"># =&gt; [ 1, 2.0, :three, 'four' ]</span>
+</pre>
+</div>
+
+
+<h2>Features</h2>
+
+<ul>
+<li>settings by named methods</li>
+<li>settings by '[]' &amp; '[]='</li>
+<li>settings &amp; locals with '='</li>
+<li>referencing existing settings</li>
+<li>nested configurations</li>
+<li>inheritance &amp; override</li>
+<li>read from string, at creation, or after - merged &amp; nested</li>
+<li>load from filename, at creation, or after - merged &amp; nested</li>
+<li>defaults</li>
+<li>merge configurations</li>
+<li>blank slate for DSL</li>
+</ul><h2>Fancy usage</h2>
+
+<ul>
+<li>Dynamic settings by '[]' &amp; '[]=' &amp; 'self'</li>
+<li>Multiple configuration files</li>
+<li>Hierarchial configuration files</li>
+</ul><h2>License</h2>
+
+<p>Copyright Gerard Fowley (<a href="mailto:gerard.fowley@iqeo.net">gerard.fowley@iqeo.net</a>).</p>
+
+<p>Licensed under GPL Version 3 license.
+See LICENSE file.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Iqeo-conf maintained by <a href="https://github.com/iqeo">iqeo</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
