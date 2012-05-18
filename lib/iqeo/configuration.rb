@@ -85,16 +85,12 @@ module Iqeo
     attr_accessor :_parent, :_items
 
     def initialize default = nil, &block
-      # todo: default immediate child Configurations should have _parent updated
-      @_items = case
-                  when default.kind_of?( HashWithIndifferentAccess ) then default
-                  when default.kind_of?( Configuration ) then default._items
-                  else HashWithIndifferentAccess.new
-                end
+      @_items = HashWithIndifferentAccess.new
       @_parent = nil
+      _merge! default if default.kind_of?( Configuration )
       if block_given?
-        if block.arity > 0                                           # cannot set parent for yield blocks here as self is wrong !?
-          yield self
+        if block.arity > 0                                            # cannot set parent for yield block here as context is unknowable
+          yield self                                                  # parent is being set in new_defer_block_for_parent
         else
           if block.binding.eval('self').kind_of?( Configuration )     # for eval block if nested configuration
             @_parent = block.binding.eval('self')                     # set parent to make inherited values available
@@ -123,11 +119,7 @@ module Iqeo
     end
 
     def _set key, value
-      # todo: extend parenting for enumerable with configurations at arbitrary depth
-      case
-      when value.kind_of?( Configuration ) then value._parent = self
-      when value.kind_of?( Enumerable )    then value.each { |v| v._parent = self if v.kind_of? Configuration }
-      end
+      value._parent = self if value.kind_of?( Configuration )
       @_items[key] = value
     end
     alias []= _set
@@ -140,8 +132,8 @@ module Iqeo
 
     def _get key
       return @_items[key] unless @_items[key].nil?
-      return @_items[key] if _parent.nil?
-      _parent._get key
+      return @_items[key] if @_parent.nil?
+      @_parent._get key
     end
     alias [] _get
 
@@ -154,17 +146,18 @@ module Iqeo
     end
 
     def _merge! other
-      # todo: merges should update _parent of any immediate child Configurations
       @_items.merge! other._items
+      @_items.values.each do |value|
+        value._parent = self if value.kind_of?( Configuration )
+      end
       self
     end
 
     def _merge other
-      # todo: merges should update _parent of any immediate child Configurations
       self.dup._merge! other
     end
 
-    # todo: can :_parent= be protected ?
+    # todo: why can't :_parent= be protected ?
 
     protected :_parent, :_items, :_items=, :_get, :[], :_set, :[]=
 

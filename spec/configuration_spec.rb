@@ -262,18 +262,7 @@ describe Configuration do
       conf.should_not be_nil
       conf.alpha.bravo.__send__(:_parent).should be conf.alpha
       conf.alpha.__send__(:_parent).should be conf
-      conf._parent.should be_nil
-    end
-
-    it 'knows its parent when contained in an enumerable' do
-      conf = nil
-      expect do
-        conf = Configuration.new
-        conf.alpha Configuration.new, Configuration.new, Configuration.new
-      end.to_not raise_error
-      conf.should_not be_nil
-      conf.alpha.each { |child| child.__send__(:_parent).should be conf }
-      conf._parent.should be_nil
+      conf.__send__(:_parent).should be_nil
     end
 
     it 'inherits settings' do
@@ -813,6 +802,7 @@ describe Configuration do
       conf.echo.should be :original1
       conf.hotel.should be :new
       conf.foxtrot.should be :overridden
+      conf.__send__(:_parent).should be nil
       conf.should be orig
     end
 
@@ -829,6 +819,63 @@ describe Configuration do
       conf.echo.should be :original1
       conf.hotel.should be :new
       conf.foxtrot.should be :overridden
+      conf.__send__(:_parent).should be nil
+      conf.should_not be orig
+    end
+
+    it 'can update with a nested configuration' do
+      orig = simple_explicit_configuration
+      orig.echo    :original1
+      orig.foxtrot :original2
+      other = Configuration.new do
+                foxtrot :overridden
+                hotel   :new
+                nested do
+                  golf  :also_new
+                  hotel :overridden
+                  echo  :overridden
+                end
+              end
+      conf = orig._merge! other
+      simple_configuration_example conf
+      conf.echo.should be :original1
+      conf.hotel.should be :new
+      conf.foxtrot.should be :overridden
+      conf.nested.alpha.should be 1
+      conf.nested.echo.should be :overridden
+      conf.nested.foxtrot.should be :overridden
+      conf.nested.golf.should be :also_new
+      conf.nested.hotel.should be :overridden
+      conf.nested.__send__(:_parent).should be conf
+      conf.__send__(:_parent).should be nil
+      conf.should be orig
+    end
+
+    it 'can create with a nested configuration' do
+      orig = simple_explicit_configuration
+      orig.echo    :original1
+      orig.foxtrot :original2
+      other = Configuration.new do
+                foxtrot :overridden
+                hotel   :new
+                nested do
+                  golf  :also_new
+                  hotel :overridden
+                  echo  :overridden
+                end
+              end
+      conf = orig._merge other
+      simple_configuration_example conf
+      conf.echo.should be :original1
+      conf.hotel.should be :new
+      conf.foxtrot.should be :overridden
+      conf.nested.alpha.should be 1
+      conf.nested.echo.should be :overridden
+      conf.nested.foxtrot.should be :overridden
+      conf.nested.golf.should be :also_new
+      conf.nested.hotel.should be :overridden
+      conf.nested.__send__(:_parent).should be conf
+      conf.__send__(:_parent).should be nil
       conf.should_not be orig
     end
 
