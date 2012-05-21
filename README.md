@@ -119,7 +119,7 @@ conf.collect { |key,value| value }  # => [ 1, 2.0, :three, 'four' ]
 * read from string, at creation, or after - merged & nested
 * load from filename, at creation, or after - merged & nested
 * defaults
-* merge configurations
+* merge configurations recursively
 * blank slate for DSL
 
 ## Fancy usage

@@ -6,40 +6,40 @@ include Iqeo
 
 describe Configuration do
 
+  def simple_eval_string
+    "alpha 1
+    bravo 'two'
+    charlie 3.0
+    delta :four"
+  end
+
+  def simple_explicit_configuration
+    conf = Configuration.new
+    conf.alpha 1
+    conf.bravo 'two'
+    conf.charlie 3.0
+    conf.delta :four
+    conf
+  end
+
+  def simple_configuration_example conf
+    conf.should_not be_nil
+    conf.alpha.should   == 1     and conf.alpha.should be_a Fixnum
+    conf.bravo.should   == "two" and conf.bravo.should be_a String
+    conf.charlie.should == 3.0   and conf.charlie.should be_a Float
+    conf.delta.should   == :four and conf.delta.should be_a Symbol
+  end
+
+  def nested_configuration_example conf
+    conf.alpha.should be_true
+    conf.foxtrot.should be_true
+    simple_configuration_example conf.bravo
+    conf.bravo.foxtrot.should be_true
+    simple_configuration_example conf.echo
+    conf.echo.foxtrot.should be_true
+  end
+
   context 'v1.0' do
-
-    def simple_eval_string
-      "alpha 1
-      bravo 'two'
-      charlie 3.0
-      delta :four"
-    end
-
-    def simple_explicit_configuration
-      conf = Configuration.new
-      conf.alpha 1
-      conf.bravo 'two'
-      conf.charlie 3.0
-      conf.delta :four
-      conf
-    end
-
-    def simple_configuration_example conf
-      conf.should_not be_nil
-      conf.alpha.should   == 1     and conf.alpha.should be_a Fixnum
-      conf.bravo.should   == "two" and conf.bravo.should be_a String
-      conf.charlie.should == 3.0   and conf.charlie.should be_a Float
-      conf.delta.should   == :four and conf.delta.should be_a Symbol
-    end
-
-    def nested_configuration_example conf
-      conf.alpha.should be_true
-      conf.foxtrot.should be_true
-      simple_configuration_example conf.bravo
-      conf.bravo.foxtrot.should be_true
-      simple_configuration_example conf.echo
-      conf.echo.foxtrot.should be_true
-    end
 
     it 'reports the correct version' do
       Configuration.version.should == CONFIGURATION_VERSION
@@ -791,7 +791,7 @@ describe Configuration do
 
     context 'merge' do
 
-      it 'can update its own configuration' do
+      it 'updates its own configuration' do
         orig = simple_explicit_configuration
         orig.echo :original1
         orig.foxtrot :original2
@@ -808,7 +808,7 @@ describe Configuration do
         conf.should be orig
       end
 
-      it 'can create a new configuration' do
+      it 'creates a new configuration' do
         orig = simple_explicit_configuration
         orig.echo :original1
         orig.foxtrot :original2
@@ -825,7 +825,7 @@ describe Configuration do
         conf.should_not be orig
       end
 
-      it 'can update with a nested configuration' do
+      it 'updates with a nested configuration' do
         orig = simple_explicit_configuration
         orig.echo    :original1
         orig.foxtrot :original2
@@ -853,7 +853,7 @@ describe Configuration do
         conf.should be orig
       end
 
-      it 'can create with a nested configuration' do
+      it 'creates with a nested configuration' do
         orig = simple_explicit_configuration
         orig.echo    :original1
         orig.foxtrot :original2
@@ -877,6 +877,72 @@ describe Configuration do
         conf.nested.golf.should be :also_new
         conf.nested.hotel.should be :overridden
         conf.nested.__send__(:_parent).should be conf
+        conf.__send__(:_parent).should be nil
+        conf.should_not be orig
+      end
+
+      it 'updates by recursively merging conflicting nested configurations' do
+        orig = simple_explicit_configuration
+        orig.nested1 = Configuration.new do
+          echo    :original
+          foxtrot :original
+          nested2 do
+            golf  :original
+            hotel :original
+          end
+        end
+        other = Configuration.new do
+          nested1 do
+            echo  :replaced
+            india :new
+            nested2 do
+              golf :replaced
+              juliet :new
+            end
+          end
+        end
+        conf = orig._merge! other
+        simple_configuration_example conf
+        conf.nested1.echo.should be :replaced
+        conf.nested1.foxtrot.should be :original
+        conf.nested1.india.should be :new
+        conf.nested1.nested2.golf.should be :replaced
+        conf.nested1.nested2.hotel.should be :original
+        conf.nested1.nested2.juliet.should be :new
+        conf.nested1.__send__(:_parent).should be conf
+        conf.__send__(:_parent).should be nil
+        conf.should be orig
+      end
+
+      it 'creates by recursively merging conflicting nested configurations' do
+        orig = simple_explicit_configuration
+        orig.nested1 = Configuration.new do
+          echo    :original
+          foxtrot :original
+          nested2 do
+            golf  :original
+            hotel :original
+          end
+        end
+        other = Configuration.new do
+          nested1 do
+            echo  :replaced
+            india :new
+            nested2 do
+              golf :replaced
+              juliet :new
+            end
+          end
+        end
+        conf = orig._merge other
+        simple_configuration_example conf
+        conf.nested1.echo.should be :replaced
+        conf.nested1.foxtrot.should be :original
+        conf.nested1.india.should be :new
+        conf.nested1.nested2.golf.should be :replaced
+        conf.nested1.nested2.hotel.should be :original
+        conf.nested1.nested2.juliet.should be :new
+        conf.nested1.__send__(:_parent).should be conf
         conf.__send__(:_parent).should be nil
         conf.should_not be orig
       end
@@ -884,6 +950,14 @@ describe Configuration do
     end
 
   end # "v1.0"
+
+  #context 'v1.1' do
+  #
+  #  context 'merge' do
+  #
+  #  end
+  #
+  #end #v1.1
 
 end
 

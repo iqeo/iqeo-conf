@@ -146,10 +146,14 @@ module Iqeo
     end
 
     def _merge! other
-      @_items.merge! other._items
-      @_items.values.each do |value|
-        value._parent = self if value.kind_of?( Configuration )
+      @_items.merge!(other._items) do |key,this,other|
+        if this.kind_of?( Configuration ) && other.kind_of?( Configuration )
+          this._merge! other
+        else
+          other
+        end
       end
+      @_items.values.each { |value| value._parent = self if value.kind_of?( Configuration ) }
       self
     end
 
