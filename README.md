@@ -121,12 +121,14 @@ conf.collect { |key,value| value }  # => [ 1, 2.0, :three, 'four' ]
 * defaults
 * merge configurations recursively
 * blank slate for DSL
+* wildcard * for chained usage: a.b.*.d
 
-## Fancy usage
+## Application
 
 * Dynamic settings by '[]' & '[]=' & 'self'
 * Multiple configuration files
 * Hierarchial configuration files
+* Validation: if a.b.*.d == true
 
 ## License
 

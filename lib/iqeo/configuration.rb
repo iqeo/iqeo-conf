@@ -59,8 +59,8 @@ module Iqeo
     #
     # Content should be in eval DSL format.
 
-    def self.read string
-      conf = self.new
+    def self.read string, options = {}
+      conf = self.new nil, options
       conf.instance_eval string
       conf
     end
@@ -69,12 +69,12 @@ module Iqeo
     #
     # Content should be in eval DSL format.
 
-    def self.load file
+    def self.load file, options = {}
       return self.read file.respond_to?(:read) ? file.read : File.read(file)
     end
 
-    def self.new_defer_block_for_parent parent, &block
-      conf = Configuration.new
+    def self.new_defer_block_for_parent parent, options = {}, &block
+      conf = Configuration.new nil, options
       conf._parent = parent
       if block_given? && block.arity > 0
         block.call(conf)                                              # this is 'yield self' from the outside
@@ -82,9 +82,18 @@ module Iqeo
       conf
     end
 
-    attr_accessor :_parent, :_items
+    OPTIONS = {
+      :blankslate => true,
+      :case_sensitive => true
+    }
 
-    def initialize default = nil, &block
+    attr_accessor :_parent, :_items, :_options
+
+    # todo: why can't :_parent= be protected ?
+    #protected :_parent, :_items, :_items= #, :_get, :[], :_set, :[]=
+
+    def initialize default = nil, options = {}, &block
+      _process_options options
       @_items = HashWithIndifferentAccess.new
       @_parent = nil
       _merge! default if default.kind_of?( Configuration )
@@ -105,11 +114,11 @@ module Iqeo
 
       name = name.to_s.chomp('=')
 
-      if block_given?                                                 # block is a nested configuration
-        if block.arity == 1                                           # yield DSL needs deferred block to set parent without binding
-          return _set name, Configuration.new_defer_block_for_parent( self, &block )
+      if block_given?                                                  # block is a nested configuration
+        if block.arity == 1                                            # yield DSL needs deferred block to set parent without binding
+          return _set name, Configuration.new_defer_block_for_parent( self, @_options, &block )
         else
-          return _set name, Configuration.new( &block )               # eval DSL can set parent from block binding in initialize
+          return _set name, Configuration.new( nil, @_options, &block ) # eval DSL can set parent from block binding in initialize
         end
       end
 
@@ -161,9 +170,45 @@ module Iqeo
       self.dup._merge! other
     end
 
-    # todo: why can't :_parent= be protected ?
+    def _configurations
+      @_items.values.select { |value| value.kind_of? Configuration }
+    end
 
-    protected :_parent, :_items, :_items=, :_get, :[], :_set, :[]=
+    def _process_options options
+      @_options = OPTIONS.merge options
+      #_wipe if @_options[:blankslate]         # todo: how to make blankslate optional ?
+    end
+
+    # todo: method '*' for wildcard dir glob like selections  eg top.*.bottom ?
+
+    def *
+      ConfigurationDelegator.new _configurations
+    end
+
+  end
+
+  class ConfigurationDelegator  # todo: inherit from < Blankslate ?
+
+    attr_reader :_confs
+
+    # protected :_confs
+
+    def initialize confs
+      @_confs = confs
+    end
+
+    def method_missing name, *values, &block
+      return @_confs.send( name, *values, &block ) if @_confs.respond_to? name     # @_confs methods are highest priority
+    end
+    #alias [] method_missing  # so we don't have to deal with [ and 'key' separately ( see alias [] _get in Configuration )
+
+    def empty?
+      @_confs.empty?
+    end
+
+    def *
+      ConfigurationDelegator.new( @_confs.inject([]) { |array,conf| array + conf._configurations } )
+    end
 
   end
 

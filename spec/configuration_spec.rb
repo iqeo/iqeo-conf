@@ -951,13 +951,168 @@ describe Configuration do
 
   end # "v1.0"
 
-  #context 'v1.1' do
-  #
-  #  context 'merge' do
-  #
-  #  end
-  #
-  #end #v1.1
+  def simple_config_1
+    Configuration.new do
+      alpha   1
+      bravo   'one'
+      charlie 1.0
+      delta   :one
+    end
+  end
+
+  def simple_config_1_example conf
+    conf.should_not be_nil
+    conf.alpha.should   == 1     and conf.alpha.should be_a Fixnum
+    conf.bravo.should   == "one" and conf.bravo.should be_a String
+    conf.charlie.should == 1.0   and conf.charlie.should be_a Float
+    conf.delta.should   == :one  and conf.delta.should be_a Symbol
+  end
+
+  def simple_config_2
+    Configuration.new do
+      echo    2
+      foxtrot 'two'
+      hotel   2.0
+      india   :two
+    end
+  end
+
+  def simple_config_2_example conf
+    conf.should_not be_nil
+    conf.echo.should    == 2     and conf.echo.should be_a Fixnum
+    conf.foxtrot.should == "two" and conf.foxtrot.should be_a String
+    conf.hotel.should   == 2.0   and conf.hotel.should be_a Float
+    conf.india.should   == :two  and conf.india.should be_a Symbol
+    conf['echo']
+    #and conf[:echo].should be_a Fixnum
+
+  end
+
+  def simple_config_3
+    Configuration.new do
+      juliet 3
+      kilo   'three'
+      lima   3.0
+      mike   :three
+    end
+  end
+
+  def simple_config_3_example conf
+    conf.should_not be_nil
+    conf.juliet.should == 3       and conf.juliet.should be_a Fixnum
+    conf.kilo.should   == "three" and conf.kilo.should be_a String
+    conf.lima.should   == 3.0     and conf.lima.should be_a Float
+    conf.mike.should   == :three  and conf.mike.should be_a Symbol
+  end
+
+  context 'v1.1' do
+
+    context 'options' do
+
+      it 'have defaults at Configuration creation' do
+        conf = Configuration.new
+        conf._options[:blankslate].should be true
+        conf._options[:case_sensitive].should be true
+      end
+
+      it 'are accepted at Configuration creation' do
+        conf = Configuration.new nil, :blankslate => false, :case_sensitive => false
+        conf._options[:blankslate].should be false
+        conf._options[:case_sensitive].should be false
+      end
+
+    end
+
+    context 'wildcard *' do
+
+      it 'returns an empty ConfigurationDelegator for subject with no child configurations' do
+        conf = simple_config_1
+        simple_config_1_example conf
+        delegator = conf.*
+        delegator.should be_a ConfigurationDelegator
+        delegator.should be_empty
+      end
+
+      it 'returns ConfigurationDelegator containing child configurations for subject' do
+        conf = simple_config_1
+        conf.nested2 = simple_config_2
+        conf.nested3 = simple_config_3
+        simple_config_1_example conf
+        simple_config_2_example conf.nested2
+        simple_config_3_example conf.nested3
+        delegator = conf.*
+        delegator.should be_a ConfigurationDelegator
+        delegator.size.should be 2
+        delegator[0].should be conf.nested2
+        delegator[1].should be conf.nested3
+      end
+
+    end
+
+    context 'ConfigurationDelegator' do
+
+      it 'can be created with no child configurations' do
+        delegator = ConfigurationDelegator.new []
+        delegator.should be_a ConfigurationDelegator
+        delegator.should be_empty
+      end
+
+      context 'wildcard *' do
+
+        # todo: question : should wildcard return nil for already empty ConfigurationDelegator / overshoot ?
+
+        it 'returns an empty ConfigurationDelegator for ConfigurationDelegator with no child configurations' do
+          conf = simple_config_1
+          conf.nested2 = simple_config_2
+          conf.nested3 = simple_config_3
+          simple_config_1_example conf
+          simple_config_2_example conf.nested2
+          simple_config_3_example conf.nested3
+          delegator = conf.*.*
+          delegator.should be_a ConfigurationDelegator
+          delegator.should be_empty
+        end
+
+        it 'returns an empty ConfigurationDelegator when overshoots' do
+          conf = simple_config_1
+          conf.nested2 = simple_config_2
+          conf.nested3 = simple_config_3
+          simple_config_1_example conf
+          simple_config_2_example conf.nested2
+          simple_config_3_example conf.nested3
+          delegator = conf.*.*.*.*.*.*.*.*.*
+          delegator.should be_a ConfigurationDelegator
+          delegator.should be_empty
+        end
+
+        it 'returns ConfigurationDelegator containing child configurations for ConfigurationDelegator' do
+          conf = simple_config_1
+          conf.nested2 = simple_config_2
+          conf.nested3 = simple_config_3
+          conf.nested2.nested2 = simple_config_2
+          conf.nested2.nested3 = simple_config_3
+          conf.nested3.nested2 = simple_config_2
+          conf.nested3.nested3 = simple_config_3
+          simple_config_1_example conf
+          simple_config_2_example conf.nested2
+          simple_config_2_example conf.nested2.nested2
+          simple_config_2_example conf.nested3.nested2
+          simple_config_3_example conf.nested3
+          simple_config_3_example conf.nested2.nested3
+          simple_config_3_example conf.nested3.nested3
+          delegator = conf.*.*
+          delegator.size.should be 4
+          delegator[0].should be conf.nested2.nested2
+          delegator[1].should be conf.nested2.nested3
+          delegator[2].should be conf.nested3.nested2
+          delegator[3].should be conf.nested3.nested3
+        end
+
+      end # wildcard *
+
+    end # ConfigurationDelagator
+
+  end #v1.1
 
 end
 
