@@ -1,5 +1,7 @@
 # Iqeo::Configuration
 
+[![Gem Version](https://badge.fury.io/rb/iqeo-conf.png)](http://badge.fury.io/rb/iqeo-conf)
+
 A DSL representing configuration files.
 
 ## Installation
