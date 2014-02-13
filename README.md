@@ -1,6 +1,7 @@
 # Iqeo::Configuration
 
 [![Gem Version](https://badge.fury.io/rb/iqeo-conf.png)](http://badge.fury.io/rb/iqeo-conf)
+[![Build Status](https://travis-ci.org/iqeo/iqeo-conf.png?branch=master)](https://travis-ci.org/iqeo/iqeo-conf)
 
 A DSL representing configuration files.
 
