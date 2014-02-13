@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    iqeo-conf (1.1.0)
+    iqeo-conf (1.1.0.pre.0)
 
 GEM
   remote: https://rubygems.org/
