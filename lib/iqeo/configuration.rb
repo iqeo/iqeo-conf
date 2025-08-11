@@ -24,7 +24,7 @@ module Iqeo
 
     instance_methods_to_undef = %w(
       !                     !=                      !~                         <=>
-      ==                    ===                     =~                         class
+      ==                    ===                     class
       clone                 define_singleton_method display                    enum_for
       eql?                  extend                  freeze                     frozen?
       hash                  initialize_clone        initialize_dup             inspect
@@ -32,9 +32,8 @@ module Iqeo
       instance_variable_set instance_variables      method                     methods
       nil?                  private_methods         protected_methods          public_method
       public_methods        public_send             respond_to?                respond_to_missing?
-      send                  singleton_class         singleton_methods          taint
-      tainted?              tap                     to_enum                    to_s
-      trust                 untaint                 untrust                    untrusted?
+      send                  singleton_class         singleton_methods
+      tap                   to_enum                 to_s
     )
 
     instance_methods_to_undef.each do |meth|
