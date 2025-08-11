@@ -128,8 +128,8 @@ describe Configuration do
           conf.should_not be_nil
           conf.alpha.should be true
           conf.bravo.should be_a Configuration
-          conf.bravo.alpha should be true
-          conf.bravo.charlie should be true
+          conf.bravo.alpha.should be true
+          conf.bravo.charlie.should be true
           conf.bravo.delta.should be_a Configuration
           conf.bravo.delta.alpha.should be true
           conf.bravo.delta.charlie.should be true
@@ -365,8 +365,8 @@ describe Configuration do
           conf.should_not be_nil
           conf.alpha.should be true
           conf.bravo.should be_a Configuration
-          conf.bravo.alpha should be true
-          conf.bravo.charlie should be true
+          conf.bravo.alpha.should be true
+          conf.bravo.charlie.should be true
           conf.bravo.delta.should be_a Configuration
           conf.bravo.delta.alpha.should be true
           conf.bravo.delta.charlie.should be true
@@ -444,8 +444,8 @@ describe Configuration do
             conf.should_not be_nil
             conf.alpha.should be true
             conf.bravo.should be_a Configuration
-            conf.bravo.alpha should be true
-            conf.bravo.charlie should be true
+            conf.bravo.alpha.should be true
+            conf.bravo.charlie.should be true
             conf.bravo.delta.should be_a Configuration
             conf.bravo.delta.alpha.should be true
             conf.bravo.delta.charlie.should be true
@@ -460,8 +460,8 @@ describe Configuration do
             conf.should_not be_nil
             conf.alpha.should be true
             conf.bravo.should be_a Configuration
-            conf.bravo.alpha should be true
-            conf.bravo.charlie should be true
+            conf.bravo.alpha.should be true
+            conf.bravo.charlie.should be true
             conf.bravo.delta.should be_a Configuration
             conf.bravo.delta.alpha.should be true
             conf.bravo.delta.charlie.should be true
@@ -487,8 +487,8 @@ describe Configuration do
             conf.should_not be_nil
             conf.alpha.should be true
             conf.bravo.should be_a Configuration
-            conf.bravo.alpha should be true
-            conf.bravo.charlie should be true
+            conf.bravo.alpha.should be true
+            conf.bravo.charlie.should be true
             conf.bravo.delta.should be_a Configuration
             conf.bravo.delta.alpha.should be true
             conf.bravo.delta.charlie.should be true
@@ -623,8 +623,8 @@ describe Configuration do
             conf.should_not be_nil
             conf.alpha.should be true
             conf.bravo.should be_a Configuration
-            conf.bravo.alpha should be true
-            conf.bravo.charlie should be true
+            conf.bravo.alpha.should be true
+            conf.bravo.charlie.should be true
             conf.bravo.delta.should be_a Configuration
             conf.bravo.delta.alpha.should be true
             conf.bravo.delta.charlie.should be true
@@ -639,8 +639,8 @@ describe Configuration do
             conf.should_not be_nil
             conf.alpha.should be true
             conf.bravo.should be_a Configuration
-            conf.bravo.alpha should be true
-            conf.bravo.charlie should be true
+            conf.bravo.alpha.should be true
+            conf.bravo.charlie.should be true
             conf.bravo.delta.should be_a Configuration
             conf.bravo.delta.alpha.should be true
             conf.bravo.delta.charlie.should be true
@@ -666,8 +666,8 @@ describe Configuration do
             conf.should_not be_nil
             conf.alpha.should be true
             conf.bravo.should be_a Configuration
-            conf.bravo.alpha should be true
-            conf.bravo.charlie should be true
+            conf.bravo.alpha.should be true
+            conf.bravo.charlie.should be true
             conf.bravo.delta.should be_a Configuration
             conf.bravo.delta.alpha.should be true
             conf.bravo.delta.charlie.should be true
@@ -731,8 +731,8 @@ describe Configuration do
             conf.should_not be_nil
             conf.alpha.should be true
             conf.bravo.should be_a Configuration
-            conf.bravo.alpha should be true
-            conf.bravo.charlie should be true
+            conf.bravo.alpha.should be true
+            conf.bravo.charlie.should be true
           end
 
         end # dynamic setting
