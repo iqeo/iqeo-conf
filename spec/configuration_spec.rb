@@ -23,7 +23,7 @@ describe Configuration do
 
   def simple_configuration_example conf
     conf.should_not be_nil
-    conf.alpha.should   == 1     and conf.alpha.should be_a Fixnum
+    conf.alpha.should   == 1     and conf.alpha.should be_a Integer
     conf.bravo.should   == "two" and conf.bravo.should be_a String
     conf.charlie.should == 3.0   and conf.charlie.should be_a Float
     conf.delta.should   == :four and conf.delta.should be_a Symbol
@@ -961,7 +961,7 @@ describe Configuration do
 
   def simple_config_1_example conf
     conf.should_not be_nil
-    conf.alpha.should   == 1     and conf.alpha.should be_a Fixnum
+    conf.alpha.should   == 1     and conf.alpha.should be_a Integer
     conf.bravo.should   == "one" and conf.bravo.should be_a String
     conf.charlie.should == 1.0   and conf.charlie.should be_a Float
     conf.delta.should   == :one  and conf.delta.should be_a Symbol
@@ -978,12 +978,12 @@ describe Configuration do
 
   def simple_config_2_example conf
     conf.should_not be_nil
-    conf.echo.should    == 2     and conf.echo.should be_a Fixnum
+    conf.echo.should    == 2     and conf.echo.should be_a Integer
     conf.foxtrot.should == "two" and conf.foxtrot.should be_a String
     conf.hotel.should   == 2.0   and conf.hotel.should be_a Float
     conf.india.should   == :two  and conf.india.should be_a Symbol
     conf['echo']
-    #and conf[:echo].should be_a Fixnum
+    #and conf[:echo].should be_a Integer
 
   end
 
@@ -998,7 +998,7 @@ describe Configuration do
 
   def simple_config_3_example conf
     conf.should_not be_nil
-    conf.juliet.should == 3       and conf.juliet.should be_a Fixnum
+    conf.juliet.should == 3       and conf.juliet.should be_a Integer
     conf.kilo.should   == "three" and conf.kilo.should be_a String
     conf.lima.should   == 3.0     and conf.lima.should be_a Float
     conf.mike.should   == :three  and conf.mike.should be_a Symbol
