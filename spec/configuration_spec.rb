@@ -30,12 +30,12 @@ describe Configuration do
   end
 
   def nested_configuration_example conf
-    conf.alpha.should be_true
-    conf.foxtrot.should be_true
+    conf.alpha.should be true
+    conf.foxtrot.should be true
     simple_configuration_example conf.bravo
-    conf.bravo.foxtrot.should be_true
+    conf.bravo.foxtrot.should be true
     simple_configuration_example conf.echo
-    conf.echo.foxtrot.should be_true
+    conf.echo.foxtrot.should be true
   end
 
   context 'v1.0' do
@@ -88,10 +88,10 @@ describe Configuration do
 
       it 'overrides defaults from another configuration' do
         conf_default = Configuration.new( simple_explicit_configuration ) { echo true }
-        conf_default.echo.should be_true
+        conf_default.echo.should be true
         conf = Configuration.new( conf_default ) { echo false }
         simple_configuration_example conf
-        conf.echo.should be_false
+        conf.echo.should be false
       end
 
       context 'can load' do
@@ -126,14 +126,14 @@ describe Configuration do
                     end"
           conf = Configuration.read string
           conf.should_not be_nil
-          conf.alpha.should be_true
+          conf.alpha.should be true
           conf.bravo.should be_a Configuration
-          conf.bravo.alpha should be_true
-          conf.bravo.charlie should be_true
+          conf.bravo.alpha should be true
+          conf.bravo.charlie should be true
           conf.bravo.delta.should be_a Configuration
-          conf.bravo.delta.alpha.should be_true
-          conf.bravo.delta.charlie.should be_true
-          conf.bravo.delta.echo.should be_true
+          conf.bravo.delta.alpha.should be true
+          conf.bravo.delta.charlie.should be true
+          conf.bravo.delta.echo.should be true
         end
 
       end # loads
@@ -249,7 +249,7 @@ describe Configuration do
         conf.should_not be_nil
         conf.alpha.should be_a Configuration
         conf.alpha.bravo.should be_a Configuration
-        conf.alpha.bravo.charlie.should be_true
+        conf.alpha.bravo.charlie.should be true
       end
 
       it 'knows its parent when referenced directly' do
@@ -277,12 +277,12 @@ describe Configuration do
           conf.alpha.bravo.bottom = true
         end.to_not raise_error
         conf.should_not be_nil
-        conf.top.should be_true
-        conf.alpha.top.should be_true
-        conf.alpha.middle.should be_true
-        conf.alpha.bravo.top.should be_true
-        conf.alpha.bravo.middle.should be_true
-        conf.alpha.bravo.bottom.should be_true
+        conf.top.should be true
+        conf.alpha.top.should be true
+        conf.alpha.middle.should be true
+        conf.alpha.bravo.top.should be true
+        conf.alpha.bravo.middle.should be true
+        conf.alpha.bravo.bottom.should be true
       end
 
       it 'can override inherited settings' do
@@ -363,14 +363,14 @@ describe Configuration do
             conf.bravo.delta.echo true
           end.to_not raise_error
           conf.should_not be_nil
-          conf.alpha.should be_true
+          conf.alpha.should be true
           conf.bravo.should be_a Configuration
-          conf.bravo.alpha should be_true
-          conf.bravo.charlie should be_true
+          conf.bravo.alpha should be true
+          conf.bravo.charlie should be true
           conf.bravo.delta.should be_a Configuration
-          conf.bravo.delta.alpha.should be_true
-          conf.bravo.delta.charlie.should be_true
-          conf.bravo.delta.echo.should be_true
+          conf.bravo.delta.alpha.should be true
+          conf.bravo.delta.charlie.should be true
+          conf.bravo.delta.echo.should be true
         end
 
       end # explicit
@@ -442,14 +442,14 @@ describe Configuration do
               end
             end.to_not raise_error
             conf.should_not be_nil
-            conf.alpha.should be_true
+            conf.alpha.should be true
             conf.bravo.should be_a Configuration
-            conf.bravo.alpha should be_true
-            conf.bravo.charlie should be_true
+            conf.bravo.alpha should be true
+            conf.bravo.charlie should be true
             conf.bravo.delta.should be_a Configuration
-            conf.bravo.delta.alpha.should be_true
-            conf.bravo.delta.charlie.should be_true
-            conf.bravo.delta.echo.should be_true
+            conf.bravo.delta.alpha.should be true
+            conf.bravo.delta.charlie.should be true
+            conf.bravo.delta.echo.should be true
           end
 
           it 'supported via {..}' do
@@ -458,14 +458,14 @@ describe Configuration do
               conf = Configuration.new { |c1| c1.alpha true ; c1.bravo { |c2| c2.charlie true ; c2.delta { |c3| c3.echo true } } }
             end.to_not raise_error
             conf.should_not be_nil
-            conf.alpha.should be_true
+            conf.alpha.should be true
             conf.bravo.should be_a Configuration
-            conf.bravo.alpha should be_true
-            conf.bravo.charlie should be_true
+            conf.bravo.alpha should be true
+            conf.bravo.charlie should be true
             conf.bravo.delta.should be_a Configuration
-            conf.bravo.delta.alpha.should be_true
-            conf.bravo.delta.charlie.should be_true
-            conf.bravo.delta.echo.should be_true
+            conf.bravo.delta.alpha.should be true
+            conf.bravo.delta.charlie.should be true
+            conf.bravo.delta.echo.should be true
           end
 
           it 'can refer to an inherited setting' do
@@ -485,17 +485,17 @@ describe Configuration do
               end
             end.to_not raise_error
             conf.should_not be_nil
-            conf.alpha.should be_true
+            conf.alpha.should be true
             conf.bravo.should be_a Configuration
-            conf.bravo.alpha should be_true
-            conf.bravo.charlie should be_true
+            conf.bravo.alpha should be true
+            conf.bravo.charlie should be true
             conf.bravo.delta.should be_a Configuration
-            conf.bravo.delta.alpha.should be_true
-            conf.bravo.delta.charlie.should be_true
-            conf.bravo.delta.echo.should be_true
-            conf.bravo.delta.golf.should be_true
-            conf.bravo.foxtrot.should be_true
-            conf.hotel.should be_true
+            conf.bravo.delta.alpha.should be true
+            conf.bravo.delta.charlie.should be true
+            conf.bravo.delta.echo.should be true
+            conf.bravo.delta.golf.should be true
+            conf.bravo.foxtrot.should be true
+            conf.hotel.should be true
           end
 
         end # nested configuration
@@ -509,7 +509,7 @@ describe Configuration do
               c.echo true
             end
             simple_configuration_example conf
-            conf.echo.should be_true
+            conf.echo.should be true
           end
 
           it 'settings into the current configuration from a file (StringIO)' do
@@ -519,7 +519,7 @@ describe Configuration do
               c.echo true
             end
             simple_configuration_example conf
-            conf.echo.should be_true
+            conf.echo.should be true
           end
 
           it 'settings into a nested configuration from a string' do
@@ -621,14 +621,14 @@ describe Configuration do
               end
             end.to_not raise_error
             conf.should_not be_nil
-            conf.alpha.should be_true
+            conf.alpha.should be true
             conf.bravo.should be_a Configuration
-            conf.bravo.alpha should be_true
-            conf.bravo.charlie should be_true
+            conf.bravo.alpha should be true
+            conf.bravo.charlie should be true
             conf.bravo.delta.should be_a Configuration
-            conf.bravo.delta.alpha.should be_true
-            conf.bravo.delta.charlie.should be_true
-            conf.bravo.delta.echo.should be_true
+            conf.bravo.delta.alpha.should be true
+            conf.bravo.delta.charlie.should be true
+            conf.bravo.delta.echo.should be true
           end
 
           it 'supported via {..}' do
@@ -637,14 +637,14 @@ describe Configuration do
               conf = Configuration.new { |c1| c1.alpha true ; c1.bravo { |c2| c2.charlie true ; c2.delta { |c3| c3.echo true } } }
             end.to_not raise_error
             conf.should_not be_nil
-            conf.alpha.should be_true
+            conf.alpha.should be true
             conf.bravo.should be_a Configuration
-            conf.bravo.alpha should be_true
-            conf.bravo.charlie should be_true
+            conf.bravo.alpha should be true
+            conf.bravo.charlie should be true
             conf.bravo.delta.should be_a Configuration
-            conf.bravo.delta.alpha.should be_true
-            conf.bravo.delta.charlie.should be_true
-            conf.bravo.delta.echo.should be_true
+            conf.bravo.delta.alpha.should be true
+            conf.bravo.delta.charlie.should be true
+            conf.bravo.delta.echo.should be true
           end
 
           it 'can refer to an inherited setting' do
@@ -664,17 +664,17 @@ describe Configuration do
               end
             end.to_not raise_error
             conf.should_not be_nil
-            conf.alpha.should be_true
+            conf.alpha.should be true
             conf.bravo.should be_a Configuration
-            conf.bravo.alpha should be_true
-            conf.bravo.charlie should be_true
+            conf.bravo.alpha should be true
+            conf.bravo.charlie should be true
             conf.bravo.delta.should be_a Configuration
-            conf.bravo.delta.alpha.should be_true
-            conf.bravo.delta.charlie.should be_true
-            conf.bravo.delta.echo.should be_true
-            conf.bravo.delta.golf.should be_true
-            conf.bravo.foxtrot.should be_true
-            conf.hotel.should be_true
+            conf.bravo.delta.alpha.should be true
+            conf.bravo.delta.charlie.should be true
+            conf.bravo.delta.echo.should be true
+            conf.bravo.delta.golf.should be true
+            conf.bravo.foxtrot.should be true
+            conf.hotel.should be true
           end
 
         end # nested configuration
@@ -693,9 +693,9 @@ describe Configuration do
               end
             end.to_not raise_error
             conf.should_not be_nil
-            conf.alpha.should be_true
-            conf.bravo.should be_true
-            conf.charlie.should be_true
+            conf.alpha.should be true
+            conf.bravo.should be true
+            conf.charlie.should be true
           end
 
           it 'name can be a setting' do
@@ -710,9 +710,9 @@ describe Configuration do
               end
             end.to_not raise_error
             conf.should_not be_nil
-            conf.alpha.should be_true
-            conf.bravo.should be_true
-            conf.charlie.should be_true
+            conf.alpha.should be true
+            conf.bravo.should be true
+            conf.charlie.should be true
             conf.setting1.should == 'bravo'
             conf.setting2.should == 'charlie'
           end
@@ -729,10 +729,10 @@ describe Configuration do
               end
             end.to_not raise_error
             conf.should_not be_nil
-            conf.alpha.should be_true
+            conf.alpha.should be true
             conf.bravo.should be_a Configuration
-            conf.bravo.alpha should be_true
-            conf.bravo.charlie should be_true
+            conf.bravo.alpha should be true
+            conf.bravo.charlie should be true
           end
 
         end # dynamic setting
