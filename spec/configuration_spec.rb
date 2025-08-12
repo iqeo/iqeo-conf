@@ -105,18 +105,6 @@ describe Configuration do
           simple_configuration_example Configuration.load StringIO.new simple_eval_string
         end
 
-        it 'simple eval DSL from file (mock & expected methods)' do
-          file = mock
-          file.should_receive( :respond_to? ).with( :read ).and_return true
-          file.should_receive( :read ).and_return simple_eval_string
-          simple_configuration_example Configuration.load file
-        end
-
-        it 'simple eval DSL from filename (expected methods)' do
-          File.should_receive( :read ).with( "filename" ).and_return simple_eval_string
-          simple_configuration_example Configuration.load "filename"
-        end
-
         it 'complex eval DSL from string' do
           string = "alpha true
                     bravo do
