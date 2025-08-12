@@ -42,7 +42,7 @@ describe Configuration do
   context 'v1.0' do
 
     it 'reports the correct version' do
-      Configuration.version.should == CONFIGURATION_VERSION
+      Configuration.version.should == '1.1.1'
     end
 
     context 'at creation' do

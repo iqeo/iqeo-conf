@@ -1,5 +1,5 @@
 
-require_relative "configuration/version"
+# require_relative "configuration/version"
 require_relative "configuration/hash_with_indifferent_access"
 
 # Iqeo namespace
@@ -50,8 +50,10 @@ module Iqeo
 
     # Returns Configuration version number.
 
+    VERSION = '1.1.1'
+
     def self.version
-      Iqeo::CONFIGURATION_VERSION
+      VERSION
     end
 
     # Creates a new Configuration instance from string.
